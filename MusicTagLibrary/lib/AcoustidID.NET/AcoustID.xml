@@ -1,0 +1,1501 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AcoustID</name>
+    </assembly>
+    <members>
+        <member name="T:AcoustID.Audio.IAudioConsumer">
+            <summary>
+            Consumer for 16bit audio data buffer.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Audio.IAudioConsumer.Consume(System.Int16[],System.Int32)">
+            <summary>
+            Consume audio data.
+            </summary>
+            <param name="input">The audio data.</param>
+            <param name="length">The number of samples to consume.</param>
+        </member>
+        <member name="T:AcoustID.Audio.IDecoder">
+            <summary>
+            Interface for audio decoders.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Audio.IDecoder.SampleRate">
+            <summary>
+            Gets the sample rate of the audio sent to the fingerprinter. 
+            </summary>
+            <remarks>
+            May be different from the source audio sample rate, if the decoder does resampling.
+            </remarks>
+        </member>
+        <member name="P:AcoustID.Audio.IDecoder.Channels">
+            <summary>
+            Gets the channel count of the audio sent to the fingerprinter. 
+            </summary>
+            <remarks>
+            May be different from the source audio channel count.
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Audio.IDecoder.Decode(AcoustID.Audio.IAudioConsumer,System.Int32)">
+            <summary>
+            Decode audio file.
+            </summary>
+            <param name="consumer">The <see cref="T:AcoustID.Audio.IAudioConsumer"/> that consumes the decoded audio.</param>
+            <param name="maxLength">The number of seconds to decode.</param>
+            <returns>Returns true, if decoding was successful.</returns>
+        </member>
+        <member name="T:AcoustID.Audio.IFFTService">
+            <summary>
+            Interface for services computing the FFT.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Audio.IFFTService.Initialize(System.Int32,System.Double[])">
+            <summary>
+            Initializes the FFT service.
+            </summary>
+            <param name="frame_size">The frame size.</param>
+            <param name="window">The window.</param>
+        </member>
+        <member name="M:AcoustID.Audio.IFFTService.ComputeFrame(System.Int16[],System.Double[])">
+            <summary>
+            Gets the FFT of given frame.
+            </summary>
+            <param name="input">The input data (time domain audio).</param>
+            <param name="output">The output data (frequency domain).</param>
+        </member>
+        <member name="T:AcoustID.Audio.LomontFFTService">
+            <summary>
+            FFT implementation by Chris Lomont (http://www.lomont.org/Software/).
+            </summary>
+        </member>
+        <member name="M:AcoustID.Audio.LomontFFTService.ComputeTable(System.Int32)">
+            <summary>
+            Call this with the size before using the FFT
+            Fills in tables for speed
+            </summary>
+            <param name="size">The table size.</param>
+        </member>
+        <member name="M:AcoustID.Audio.LomontFFTService.FFT(System.Double[])">
+            <summary>
+            Compute the forward or inverse FFT of data, which is 
+            complex valued items, stored in alternating real and 
+            imaginary real numbers. The length must be a power of 2.
+            </summary>
+            <param name="data">The audio data (time domain).</param>
+        </member>
+        <member name="M:AcoustID.Audio.LomontFFTService.RealFFT(System.Double[])">
+            <summary>
+            Computes the real FFT.
+            </summary>
+            <param name="data">The audio data (time domain).</param>
+        </member>
+        <member name="T:AcoustID.Audio.Resampler">
+            <summary>
+            Audio resampling as implemented in FFmpeg.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Audio.Resampler.Init(System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean,System.Double)">
+            <summary>
+            Initialize the audio resampler. 
+            </summary>
+            <param name="out_rate">Output sample rate</param>
+            <param name="in_rate">Input sample rate</param>
+            <param name="filter_size">Length of each FIR filter in the filterbank relative to the 
+            cutoff freq</param>
+            <param name="phase_shift">Log2 of the number of entries in the polyphase filterbank</param>
+            <param name="linear">If true then the used FIR filter will be linearly interpolated between 
+            the 2 closest, if false the closest will be used</param>
+            <param name="cutoff">Cutoff frequency, 1.0 corresponds to half the output sampling rate</param>
+        </member>
+        <member name="M:AcoustID.Audio.Resampler.Resample(System.Int16[],System.Int16[],System.Int32@,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Resample an array of samples using a previously configured context.
+            </summary>
+            <param name="dst"></param>
+            <param name="src">Array of unconsumed samples </param>
+            <param name="consumed">Number of samples of src which have been consumed are returned here</param>
+            <param name="src_size">Number of unconsumed samples available </param>
+            <param name="dst_size">Amount of space in samples available in dst</param>
+            <param name="update_ctx">If this is false then the context will not be modified, that way several 
+            channels can be resampled with the same context. </param>
+            <returns>Number of samples written in dst or -1 if an error occurred</returns>
+        </member>
+        <member name="M:AcoustID.Audio.Resampler.Bessel(System.Double)">
+            <summary>
+            0th order modified bessel function of the first kind.
+            </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AcoustID.ChromaContext">
+            <summary>
+            The main Chromaprint API.
+            </summary>
+        </member>
+        <member name="M:AcoustID.ChromaContext.GetVersion">
+            <summary>
+            Return the version number of Chromaprint.
+            </summary>
+        </member>
+        <member name="P:AcoustID.ChromaContext.Algorithm">
+            <summary>
+            Gets the fingerprint algorithm this context is configured to use.
+            </summary>
+        </member>
+        <member name="P:AcoustID.ChromaContext.Version">
+            <summary>
+            Return the version number of Chromaprint.
+            </summary>
+        </member>
+        <member name="M:AcoustID.ChromaContext.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.ChromaContext" /> class.
+            </summary>
+        </member>
+        <member name="M:AcoustID.ChromaContext.#ctor(AcoustID.Audio.IFFTService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.ChromaContext" /> class.
+            </summary>
+            <param name="fftService">The FFT service.</param>
+        </member>
+        <member name="M:AcoustID.ChromaContext.#ctor(AcoustID.Chromaprint.ChromaprintAlgorithm)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.ChromaContext" /> class.
+            </summary>
+            <param name="algorithm">The algorithm to use, see <see cref="T:AcoustID.Chromaprint.ChromaprintAlgorithm" /> (default = TEST2)</param>
+        </member>
+        <member name="M:AcoustID.ChromaContext.#ctor(AcoustID.Chromaprint.ChromaprintAlgorithm,AcoustID.Audio.IFFTService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.ChromaContext" /> class.
+            </summary>
+            <param name="algorithm">The algorithm to use, see <see cref="T:AcoustID.Chromaprint.ChromaprintAlgorithm" /> (default = TEST2)</param>
+            <param name="fftService">The FFT service.</param>
+        </member>
+        <member name="M:AcoustID.ChromaContext.Consume(System.Int16[],System.Int32)">
+            <summary>
+            Send audio data to the fingerprint calculator (alias to Feed() method).
+            </summary>
+            <param name="data">raw audio data, should point to an array of 16-bit 
+            signed integers in native byte-order</param>
+            <param name="size">size of the data buffer (in samples)</param>
+        </member>
+        <member name="M:AcoustID.ChromaContext.SetOption(System.String,System.Int32)">
+            <summary>
+            Set a configuration option for the selected fingerprint algorithm.
+            </summary>
+            <param name="name">option name</param>
+            <param name="value">option value</param>
+            <returns>False on error, true on success</returns>
+            <remarks>
+            NOTE: DO NOT USE THIS FUNCTION IF YOU ARE PLANNING TO USE
+            THE GENERATED FINGERPRINTS WITH THE ACOUSTID SERVICE.
+            
+            Possible options:
+             - silence_threshold: threshold for detecting silence, 0-32767
+            </remarks>
+        </member>
+        <member name="M:AcoustID.ChromaContext.Start(System.Int32,System.Int32)">
+            <summary>
+            Restart the computation of a fingerprint with a new audio stream
+            </summary>
+            <param name="sample_rate">sample rate of the audio stream (in Hz)</param>
+            <param name="num_channels">numbers of channels in the audio stream (1 or 2)</param>
+            <returns>False on error, true on success</returns>
+        </member>
+        <member name="M:AcoustID.ChromaContext.Feed(System.Int16[],System.Int32)">
+            <summary>
+            Send audio data to the fingerprint calculator.
+            </summary>
+            <param name="data">raw audio data, should point to an array of 16-bit 
+            signed integers in native byte-order</param>
+            <param name="size">size of the data buffer (in samples)</param>
+        </member>
+        <member name="M:AcoustID.ChromaContext.Finish">
+            <summary>
+            Process any remaining buffered audio data and calculate the fingerprint.
+            </summary>
+        </member>
+        <member name="M:AcoustID.ChromaContext.GetFingerprint">
+            <summary>
+            Return the calculated fingerprint as a compressed string.
+            </summary>
+            <returns>The fingerprint as a compressed string</returns>
+        </member>
+        <member name="M:AcoustID.ChromaContext.GetRawFingerprint">
+            <summary>
+            Return the calculated fingerprint as an array of 32-bit integers.
+            </summary>
+            <returns>The raw fingerprint (array of 32-bit integers)</returns>
+        </member>
+        <member name="M:AcoustID.ChromaContext.EncodeFingerprint(System.Int32[],System.Int32,System.Boolean)">
+            <summary>
+            Compress and optionally base64-encode a raw fingerprint.
+            </summary>
+            <param name="fp">Pointer to an array of 32-bit integers representing the raw fingerprint to be encoded.</param>
+            <param name="algorithm">Chromaprint algorithm version which was used to generate the raw fingerprint.</param>
+            <param name="base64">Whether to return binary data or base64-encoded ASCII data.</param>
+            <returns>The encoded fingerprint.</returns>
+        </member>
+        <member name="M:AcoustID.ChromaContext.DecodeFingerprint(System.Byte[],System.Boolean,System.Int32@)">
+            <summary>
+            Uncompress and optionally base64-decode an encoded fingerprint.
+            </summary>
+            <param name="encoded_fp">Pointer to an encoded fingerprint.</param>
+            <param name="base64">Whether the encoded_fp parameter contains binary data or base64-encoded ASCII data.</param>
+            <param name="algorithm">Chromaprint algorithm version which was used to generate the raw fingerprint.</param>
+            <returns>The decoded raw fingerprint (array of 32-bit integers).</returns>
+        </member>
+        <member name="M:AcoustID.ChromaContext.GetFingerprintHash">
+             <summary>
+             Return 32-bit hash of the calculated fingerprint.
+             </summary>
+             <returns>The hash.</returns>
+             <remarks>
+             If two fingerprints are similar, their hashes generated by this function
+             will also be similar. If they are significantly different, their hashes
+             will most likely be significantly different as well, but you can't rely
+             on that.
+            
+             You compare two hashes by counting the bits in which they differ. Normally
+             that would be something like POPCNT(hash1 XOR hash2), which returns a
+             number between 0 and 32. Anthing above 15 means the hashes are
+             completely different.
+             </remarks>
+        </member>
+        <member name="T:AcoustID.Chromaprint.AudioProcessor">
+            <summary>
+            Audio processor with multi-channel to mono converting and resampling. Passes
+            the pre-processed data on to a given consumer.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.Chroma">
+            <summary>
+            Transform frequencies into musical notes.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.ChromaFilter">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.ChromaNormalizer">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.ChromaprintAlgorithm">
+            <summary>
+            Chromaprint algorithm enum.
+            </summary>
+        </member>
+        <member name="F:AcoustID.Chromaprint.ChromaprintAlgorithm.TEST1">
+            <summary>
+            Use fingerprinter configuration 1.
+            </summary>
+        </member>
+        <member name="F:AcoustID.Chromaprint.ChromaprintAlgorithm.TEST2">
+            <summary>
+            Use fingerprinter configuration 2.
+            </summary>
+        </member>
+        <member name="F:AcoustID.Chromaprint.ChromaprintAlgorithm.TEST3">
+            <summary>
+            Use fingerprinter configuration 3.
+            </summary>
+        </member>
+        <member name="F:AcoustID.Chromaprint.ChromaprintAlgorithm.TEST4">
+            <summary>
+            Use fingerprinter configuration 4.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.ChromaResampler">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.CombinedBuffer">
+            <summary>
+            Combines two short (Int16) buffers.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Chromaprint.CombinedBuffer.Size">
+            <summary>
+            Gets the size of the combined buffer.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Chromaprint.CombinedBuffer.Offset">
+            <summary>
+            Gets the current offset of the combined buffer.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Chromaprint.CombinedBuffer.Item(System.Int32)">
+            <summary>
+            Gets the element at given position.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Chromaprint.CombinedBuffer.Shift(System.Int32)">
+            <summary>
+            Shift the buffer offset.
+            </summary>
+            <param name="shift">Places to shift.</param>
+            <returns>The new buffer offset.</returns>
+        </member>
+        <member name="M:AcoustID.Chromaprint.CombinedBuffer.Read(System.Int16[],System.Int32,System.Int32)">
+            <summary>
+            Read a number of values from the combined buffer.
+            </summary>
+            <param name="buffer">Buffer to write into.</param>
+            <param name="offset">Offset to start reading.</param>
+            <param name="length">Number of values to read.</param>
+            <returns>Total number of values read.</returns>
+        </member>
+        <member name="M:AcoustID.Chromaprint.CombinedBuffer.Flush(System.Int16[])">
+            <summary>
+            Read all remaining values from the buffer.
+            </summary>
+            <param name="buffer">Buffer to write into.</param>
+        </member>
+        <member name="T:AcoustID.Chromaprint.FFT">
+            <summary>
+            Consumes audio data and passes the FFT of this data on to
+            a FFT frame consumer.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.Filter">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.FingerprintCalculator">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.FingerprintCompressor">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Chromaprint.FingerprintCompressor.Compress(System.Int32[],System.Int32)">
+            <summary>
+            Compress a fingerprint data array.
+            </summary>
+            <param name="data">The fingerprint (array of 32-bit integers).</param>
+            <param name="algorithm">The algorithm used to compute the fingerprint.</param>
+            <returns>The compressed fingerprint string.</returns>
+        </member>
+        <member name="T:AcoustID.Chromaprint.FingerprintDecompressor">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Chromaprint.FingerprintDecompressor.Decompress(System.String,System.Int32@)">
+            <summary>
+            Decompress a fingerprint string.
+            </summary>
+            <param name="data">The fingerprint string.</param>
+            <param name="algorithm">The algorithm used to compute the fingerprint (output).</param>
+            <returns>The fingerprint as an array of 32-bit integers.</returns>
+        </member>
+        <member name="T:AcoustID.Chromaprint.Fingerprinter">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Chromaprint.Fingerprinter.Start(System.Int32,System.Int32)">
+            <summary>
+            Initialize the fingerprinting process.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Chromaprint.Fingerprinter.Consume(System.Int16[],System.Int32)">
+            <summary>
+            Process a block of raw audio data. Call this method as many times
+            as you need.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Chromaprint.Fingerprinter.Finish">
+            <summary>
+            Calculate the fingerprint based on the provided audio data.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.FingerprinterConfiguration">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.IFeatureVectorConsumer">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.IFFTFrameConsumer">
+            <summary>
+            Consumer of frames produced by FFT.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.Image">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Chromaprint.Image.Columns">
+            <summary>
+            Gets the number of columns.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Chromaprint.Image.Rows">
+            <summary>
+            Gets the number of rows.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Chromaprint.Image.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Chromaprint.Image" /> class.
+            </summary>
+            <param name="columns">The number of columns.</param>
+        </member>
+        <member name="M:AcoustID.Chromaprint.Image.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Chromaprint.Image" /> class.
+            </summary>
+            <param name="columns">The number of columns.</param>
+            <param name="rows">The number of rows.</param>
+        </member>
+        <member name="M:AcoustID.Chromaprint.Image.#ctor(System.Int32,System.Double[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Chromaprint.Image" /> class.
+            </summary>
+            <param name="columns">The number of columns.</param>
+            <param name="data">The image data.</param>
+        </member>
+        <member name="T:AcoustID.Chromaprint.ImageBuilder">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.IntegralImage">
+            <summary>
+            Image transformation that allows us to quickly calculate the sum of values 
+            in a rectangular area.
+            </summary>
+            <remarks>
+            http://en.wikipedia.org/wiki/Summed_area_table
+            </remarks>
+        </member>
+        <member name="T:AcoustID.Chromaprint.MovingAverage">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.Quantizer">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.SilenceRemover">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.SpectralCentroid">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Chromaprint.Spectrum">
+            <summary>
+            TODO: Update summary.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Configuration">
+            <summary>
+            Static configuration class.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Configuration.ClientKey">
+            <summary>
+            The client API key for using the AcoustID webservice.
+            </summary>
+            <remarks>
+            Visit https://acoustid.org/new-application to get an API key for your application.
+            </remarks>
+        </member>
+        <member name="P:AcoustID.Configuration.UserAgent">
+            <summary>
+            Gets or sets the user-agent string.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Configuration.Proxy">
+            <summary>
+            Gets or sets a <see cref="T:System.Net.IWebProxy"/> used to call the webservice.
+            </summary>
+        </member>
+        <member name="T:AcoustID.IChromaContext">
+            <summary>
+            The basic Chromaprint interface.
+            </summary>
+        </member>
+        <member name="P:AcoustID.IChromaContext.Algorithm">
+            <summary>
+            Gets the fingerprint algorithm the context is configured to use.
+            </summary>
+        </member>
+        <member name="P:AcoustID.IChromaContext.Version">
+            <summary>
+            Return the version number of Chromaprint.
+            </summary>
+        </member>
+        <member name="M:AcoustID.IChromaContext.Start(System.Int32,System.Int32)">
+            <summary>
+            Restart the computation of a fingerprint with a new audio stream
+            </summary>
+            <param name="sample_rate">sample rate of the audio stream (in Hz)</param>
+            <param name="num_channels">numbers of channels in the audio stream (1 or 2)</param>
+            <returns>False on error, true on success</returns>
+        </member>
+        <member name="M:AcoustID.IChromaContext.Feed(System.Int16[],System.Int32)">
+            <summary>
+            Send audio data to the fingerprint calculator.
+            </summary>
+            <param name="data">raw audio data, should point to an array of 16-bit 
+            signed integers in native byte-order</param>
+            <param name="size">size of the data buffer (in samples)</param>
+        </member>
+        <member name="M:AcoustID.IChromaContext.Finish">
+            <summary>
+            Process any remaining buffered audio data and calculate the fingerprint.
+            </summary>
+        </member>
+        <member name="M:AcoustID.IChromaContext.GetFingerprint">
+            <summary>
+            Return the calculated fingerprint as a compressed string.
+            </summary>
+            <returns>The fingerprint as a compressed string</returns>
+        </member>
+        <member name="M:AcoustID.IChromaContext.GetRawFingerprint">
+            <summary>
+            Return the calculated fingerprint as an array of 32-bit integers.
+            </summary>
+            <returns>The raw fingerprint (array of 32-bit integers)</returns>
+        </member>
+        <member name="M:AcoustID.IChromaContext.GetFingerprintHash">
+            <summary>
+            Return 32-bit hash of the calculated fingerprint.
+            </summary>
+            <returns>The hash.</returns>
+        </member>
+        <member name="T:AcoustID.Native.NativeChromaContext">
+            <summary>
+            Wraps the native Chromaprint API.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.GetVersion">
+            <summary>
+            Returns the Chromaprint version.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Native.NativeChromaContext.Algorithm">
+            <summary>
+            Gets the fingerprint algorithm this context is configured to use.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Native.NativeChromaContext.Version">
+            <summary>
+            Gets the Chromaprint version.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Native.NativeChromaContext" /> class.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.#ctor(AcoustID.Chromaprint.ChromaprintAlgorithm)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Native.NativeChromaContext" /> class.
+            </summary>
+            <param name="algorithm">The algorithm to use, see <see cref="T:AcoustID.Chromaprint.ChromaprintAlgorithm" /> (default = TEST2)</param>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.Consume(System.Int16[],System.Int32)">
+            <summary>
+            Send audio data to the fingerprint calculator (alias to Feed() method).
+            </summary>
+            <param name="data">raw audio data, should point to an array of 16-bit 
+            signed integers in native byte-order</param>
+            <param name="size">size of the data buffer (in samples)</param>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.Start(System.Int32,System.Int32)">
+            <summary>
+            Restart the computation of a fingerprint with a new audio stream.
+            </summary>
+            <param name="sample_rate">Sample rate of the audio stream (in Hz).</param>
+            <param name="num_channels">Numbers of channels in the audio stream (1 or 2).</param>
+            <returns>False on error, true on success.</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.Feed(System.Int16[],System.Int32)">
+            <summary>
+            Send audio data to the fingerprint calculator.
+            </summary>
+            <param name="data">Raw audio data, should point to an array of 16-bit 
+            signed integers in native byte-order.</param>
+            <param name="size">Size of the data buffer (in samples).</param>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.Finish">
+            <summary>
+            Process any remaining buffered audio data and calculate the fingerprint.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.GetFingerprint">
+            <summary>
+            Return the calculated fingerprint as a compressed string.
+            </summary>
+            <returns>The fingerprint as a compressed string.</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.GetRawFingerprint">
+            <summary>
+            Return the calculated fingerprint as an array of 32-bit integers.
+            </summary>
+            <returns>The raw fingerprint (array of 32-bit integers).</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.GetFingerprintHash">
+            <summary>
+            Return 32-bit hash of the calculated fingerprint.
+            </summary>
+            <returns>The hash.</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.Clear">
+            <summary>
+            Clear the current fingerprint, but allow more data to be processed.
+            </summary>
+            <returns>False on error, true on success.</returns>
+            <remarks>
+            This is useful if you are processing a long stream and want to many smaller fingerprints,
+            instead of waiting for the entire stream to be processed.
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.EncodeFingerprint(System.Int32[],System.Int32,System.Boolean)">
+            <summary>
+            Compress and optionally base64-encode a raw fingerprint.
+            </summary>
+            <param name="fp">Pointer to an array of 32-bit integers representing the raw fingerprint to be encoded.</param>
+            <param name="algorithm">Chromaprint algorithm version which was used to generate the raw fingerprint.</param>
+            <param name="base64">Whether to return binary data or base64-encoded ASCII data.</param>
+            <returns>The encoded fingerprint.</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.DecodeFingerprint(System.Byte[],System.Boolean,System.Int32@)">
+            <summary>
+            Uncompress and optionally base64-decode an encoded fingerprint.
+            </summary>
+            <param name="encoded">Pointer to an encoded fingerprint.</param>
+            <param name="base64">Whether the encoded_fp parameter contains binary data or base64-encoded ASCII data.</param>
+            <param name="algorithm">Chromaprint algorithm version which was used to generate the raw fingerprint.</param>
+            <returns>The decoded raw fingerprint (array of 32-bit integers).</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.HashFingerprint(System.Int32[])">
+            <summary>
+            Return 32-bit hash of the calculated fingerprint.
+            </summary>
+            <param name="fingerprint">Array of 32-bit integers representing the raw fingerprint to be encoded.</param>
+            <returns>The hash.</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.Dispose">
+            <summary>
+            Free unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Native.NativeChromaContext.Dispose(System.Boolean)">
+            <summary>
+            Free unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_version">
+            <summary>
+            Return the version number of Chromaprint.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_new(System.Int32)">
+            <summary>
+            Allocate and initialize the Chromaprint context.
+            </summary>
+            <param name="algorithm">the fingerprint algorithm version you want to use, or CHROMAPRINT_ALGORITHM_DEFAULT for the default algorithm</param>
+            <returns>Chromaprint context pointer</returns>
+            <remarks>
+            Note that when Chromaprint is compiled with FFTW, this function is
+            not reentrant and you need to call it only from one thread at a time.
+            This is not a problem when using FFmpeg or vDSP.
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_free(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Deallocate the Chromaprint context.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <remarks>
+            Note that when Chromaprint is compiled with FFTW, this function is
+            not reentrant and you need to call it only from one thread at a time.
+            This is not a problem when using FFmpeg or vDSP.
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_algorithm(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Return the fingerprint algorithm this context is configured to use.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <returns>current algorithm version</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_num_channels(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Get the number of channels that is internally used for fingerprinting.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <returns>number of channels</returns>
+            <remarks>
+            You normally don't need this. Just set the audio's actual number of channels
+            when calling chromaprint_start() and everything will work. This is only used for
+            certain optimized cases to control the audio source.
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_sample_rate(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Get the sampling rate that is internally used for fingerprinting.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <returns>sampling rate</returns>
+            <remarks>
+            You normally don't need this. Just set the audio's actual number of channels
+            when calling chromaprint_start() and everything will work. This is only used for
+            certain optimized cases to control the audio source.
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_item_duration(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Get the duration of one item in the raw fingerprint in samples.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <returns>duration in samples</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_item_duration_ms(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Get the duration of one item in the raw fingerprint in milliseconds.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <returns>duration in milliseconds</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_delay(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Get the duration of internal buffers that the fingerprinting algorithm uses.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <returns>duration in samples</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_delay_ms(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Get the duration of internal buffers that the fingerprinting algorithm uses.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <returns>duration in milliseconds</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_start(AcoustID.Native.ChromaprintContext,System.Int32,System.Int32)">
+            <summary>
+            Restart the computation of a fingerprint with a new audio stream.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <param name="sample_rate">sample_rate sample rate of the audio stream (in Hz)</param>
+            <param name="num_channels">num_channels numbers of channels in the audio stream (1 or 2)</param>
+            <returns>0 on error, 1 on success</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_feed(AcoustID.Native.ChromaprintContext,System.IntPtr,System.Int32)">
+            <summary>
+            Send audio data to the fingerprint calculator.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <param name="data">raw audio data, should point to an array of 16-bit signed integers in native byte-order</param>
+            <param name="size">size of the data buffer (in samples)</param>
+            <returns>0 on error, 1 on success</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_finish(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Process any remaining buffered audio data.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <returns>0 on error, 1 on success</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_fingerprint(AcoustID.Native.ChromaprintContext,System.IntPtr@)">
+            <summary>
+            Return the calculated fingerprint as a compressed string.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <param name="fingerprint">pointer to a pointer, where a pointer to the allocated array will be stored</param>
+            <returns>0 on error, 1 on success</returns>
+            <remarks>
+            The caller is responsible for freeing the returned pointer using chromaprint_dealloc().
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_raw_fingerprint(AcoustID.Native.ChromaprintContext,System.IntPtr@,System.Int32@)">
+            <summary>
+            Return the calculated fingerprint as an array of 32-bit integers.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <param name="fingerprint">pointer to a pointer, where a pointer to the allocated array will be stored</param>
+            <param name="size">number of items in the returned raw fingerprint</param>
+            <returns>0 on error, 1 on success</returns>
+            <remarks>
+            The caller is responsible for freeing the returned pointer using chromaprint_dealloc().
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_raw_fingerprint_size(AcoustID.Native.ChromaprintContext,System.Int32@)">
+            <summary>
+            Return the length of the current raw fingerprint.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <param name="size">number of items in the current raw fingerprint</param>
+            <returns>0 on error, 1 on success</returns>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_get_fingerprint_hash(AcoustID.Native.ChromaprintContext,System.Int32@)">
+            <summary>
+            Return 32-bit hash of the calculated fingerprint.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <param name="hash">pointer to a 32-bit integer where the hash will be stored</param>
+            <returns>0 on error, 1 on success</returns>
+            <remarks>
+            See chromaprint_hash_fingerprint() for details on how to use the hash.
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_clear_fingerprint(AcoustID.Native.ChromaprintContext)">
+            <summary>
+            Clear the current fingerprint, but allow more data to be processed.
+            </summary>
+            <param name="ctx">Chromaprint context pointer</param>
+            <returns>0 on error, 1 on success</returns>
+            <remarks>
+            This is useful if you are processing a long stream and want to many
+            smaller fingerprints, instead of waiting for the entire stream to be
+            processed.
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_encode_fingerprint(System.IntPtr,System.Int32,System.Int32,System.IntPtr@,System.Int32@,System.Int32)">
+            <summary>
+            Compress and optionally base64-encode a raw fingerprint
+            </summary>
+            <param name="fp">pointer to an array of 32-bit integers representing the raw fingerprint to be encoded</param>
+            <param name="size">number of items in the raw fingerprint</param>
+            <param name="algorithm">Chromaprint algorithm version which was used to generate the raw fingerprint</param>
+            <param name="encoded_fp">[out] pointer to a pointer, where the encoded fingerprint will be stored</param>
+            <param name="encoded_size">[out] size of the encoded fingerprint in bytes</param>
+            <param name="base64">Whether to return binary data or base64-encoded ASCII data.</param>
+            <returns>0 on error, 1 on success</returns>
+            <remarks>
+            The caller is responsible for freeing the returned pointer using chromaprint_dealloc().
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_decode_fingerprint(System.IntPtr,System.Int32,System.IntPtr@,System.Int32@,System.Int32@,System.Int32)">
+            <summary>
+            Uncompress and optionally base64-decode an encoded fingerprint
+            </summary>
+            <param name="encoded_fp">pointer to an encoded fingerprint</param>
+            <param name="encoded_size">size of the encoded fingerprint in bytes</param>
+            <param name="fp">[out] pointer to a pointer, where the decoded raw fingerprint (array of 32-bit integers) will be stored</param>
+            <param name="size">[out] Number of items in the returned raw fingerprint</param>
+            <param name="algorithm">[out] Chromaprint algorithm version which was used to generate the raw fingerprint</param>
+            <param name="base64">Whether the encoded_fp parameter contains binary data or base64-encoded ASCII data.</param>
+            <returns>0 on error, 1 on success</returns>
+            <remarks>
+            The caller is responsible for freeing the returned pointer using chromaprint_dealloc().
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_hash_fingerprint(System.IntPtr,System.Int32,System.Int32@)">
+             <summary>
+             Generate a single 32-bit hash for a raw fingerprint.
+             </summary>
+             <param name="fp">pointer to an array of 32-bit integers representing the raw fingerprint to be hashed</param>
+             <param name="size">number of items in the raw fingerprint</param>
+             <param name="hash">[out] pointer to a 32-bit integer where the hash will be stored</param>
+             <returns>0 on error, 1 on success</returns>
+             <remarks>
+             If two fingerprints are similar, their hashes generated by this function
+             will also be similar. If they are significantly different, their hashes
+             will most likely be significantly different as well, but you can't rely
+             on that.
+            
+             You compare two hashes by counting the bits in which they differ. Normally
+             that would be something like POPCNT(hash1 XOR hash2), which returns a
+             number between 0 and 32. Anthing above 15 means the hashes are
+             completely different.
+             </remarks>
+        </member>
+        <member name="M:AcoustID.Native.NativeMethods.chromaprint_dealloc(System.IntPtr)">
+            <summary>
+            Free memory allocated by any function from the Chromaprint API.
+            </summary>
+            <param name="ptr">pointer to be deallocated</param>
+        </member>
+        <member name="T:AcoustID.Util.Base64">
+            <summary>
+            Encode and decode Base64 data.
+            </summary>
+            <remarks>
+            This is a custom base64 implementation. Using Convert.ToBase64String and Convert.FromBase64String
+            is not an option here.
+            </remarks>
+        </member>
+        <member name="T:AcoustID.Util.BitStringReader">
+            <summary>
+            Read bits from a string.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Util.BitStringWriter">
+            <summary>
+            Write bits to a string.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Util.Helper">
+            <summary>
+            DSP and math helper methods.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Util.ImageGenerator.ComputeChromagram(AcoustID.Audio.IDecoder)">
+            <summary>
+            Computes the chromagram of an audio file.
+            </summary>
+            <param name="decoder">The <see cref="T:AcoustID.Audio.IDecoder"/> instance.</param>
+            <returns>Chroma image.</returns>
+        </member>
+        <member name="M:AcoustID.Util.ImageGenerator.ComputeSpectrogram(AcoustID.Audio.IDecoder)">
+            <summary>
+            Computes the spectogram of an audio file.
+            </summary>
+            <param name="decoder">The <see cref="T:AcoustID.Audio.IDecoder"/> instance.</param>
+            <returns>Chroma image.</returns>
+        </member>
+        <member name="T:AcoustID.Util.SimHash">
+            <summary>
+            SimHash implementation.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Util.SimHash.Compute(System.Int32[])">
+            <summary>
+            Generate a single 32-bit hash for an array of integers.
+            </summary>
+            <param name="data">Array of 32-bit integers representing the data to be hashed.</param>
+            <returns>The hash.</returns>
+        </member>
+        <member name="M:AcoustID.Util.SimHash.Compute(System.Int32[],System.Int32,System.Int32)">
+            <summary>
+            Generate a single 32-bit hash for an array of integers.
+            </summary>
+            <param name="data">Array of 32-bit integers representing the data to be hashed.</param>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns>The hash.</returns>
+        </member>
+        <member name="T:AcoustID.Web.Artist">
+            <summary>
+            Represents an artist.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.Artist.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.Artist" /> class.
+            </summary>
+            <param name="id">The MusicBrainz ID.</param>
+            <param name="name">The artist name.</param>
+        </member>
+        <member name="P:AcoustID.Web.Artist.Id">
+            <summary>
+            Gets the MusicBrainz id of the artist.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Artist.Name">
+            <summary>
+            Gets the name of the artist.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Web.IResponseParser">
+            <summary>
+            Parse the response of a AcoustId lookup or submit request.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.IResponseParser.Format">
+            <summary>
+            Gets the format of the response parser (must be "xml" or "json").
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.IResponseParser.CanParse(System.String)">
+            <summary>
+            Indicates if the parser can read the given text format.
+            </summary>
+            <param name="text">The webservice response.</param>
+            <returns>Returns true, if the parser can parse the given content.</returns>
+        </member>
+        <member name="M:AcoustID.Web.IResponseParser.ParseLookupResponse(System.String)">
+            <summary>
+            Parse the content of a lookup response.
+            </summary>
+            <param name="text">The webservice response.</param>
+            <returns>A list of <see cref="T:AcoustID.Web.LookupResult"/>.</returns>
+        </member>
+        <member name="M:AcoustID.Web.IResponseParser.ParseSubmitResponse(System.String)">
+            <summary>
+            Parse the content of a submit response.
+            </summary>
+            <param name="text">The webservice response.</param>
+            <returns>A list of <see cref="T:AcoustID.Web.SubmitResult"/>.</returns>
+        </member>
+        <member name="T:AcoustID.Web.LookupResponse">
+            <summary>
+            The webservice response containing the status code and a list of lookup results.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.LookupResponse.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.LookupResponse" /> class.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.LookupResponse.#ctor(System.Net.HttpStatusCode,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.LookupResponse" /> class.
+            </summary>
+            <param name="status">The HTTP status code.</param>
+            <param name="error">The error message.</param>
+        </member>
+        <member name="P:AcoustID.Web.LookupResponse.StatusCode">
+            <summary>
+            Gets the status code returned by the webservice.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.LookupResponse.ErrorMessage">
+            <summary>
+            Gets the error message, in case the status code is not "200 OK".
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.LookupResponse.Results">
+            <summary>
+            Gets a list of <see cref="T:AcoustID.Web.LookupResult"/>s.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Web.LookupResult">
+            <summary>
+            Result of a lookup request.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.LookupResult.#ctor(System.String,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.LookupResult" /> class.
+            </summary>
+            <param name="id">The AcoustID.</param>
+            <param name="score">The score (between 0 and 1).</param>
+        </member>
+        <member name="P:AcoustID.Web.LookupResult.Id">
+            <summary>
+            Gets the AcoustID of the lookup result.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.LookupResult.Score">
+            <summary>
+            Gets the score of the lookup result (between 0 and 1).
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.LookupResult.Recordings">
+            <summary>
+            Gets the recordings of the lookup result.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Web.LookupService">
+            <summary>
+            Calls the AcoustID webservice to lookup audio data for a given fingerprint.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.LookupService.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.LookupService" /> class.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.LookupService.#ctor(AcoustID.Web.IResponseParser)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.LookupService" /> class.
+            </summary>
+            <param name="parser">The <see cref="T:AcoustID.Web.IResponseParser"/> instance.</param>
+        </member>
+        <member name="P:AcoustID.Web.LookupService.UseCompression">
+            <summary>
+            Gets or sets a value indicating whether to compress the data before submit.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.LookupService.GetAsync(System.String,System.Int32)">
+            <summary>
+            Lookup a fingerprint using the AcoustID webservice.
+            </summary>
+            <param name="fingerprint">The audio fingerprint.</param>
+            <param name="duration">The total duration of the audio.</param>
+            <returns>A task which returns a <see cref="T:AcoustID.Web.LookupResponse"/>.</returns>
+        </member>
+        <member name="M:AcoustID.Web.LookupService.GetAsync(System.String,System.Int32,System.String[])">
+            <summary>
+            Lookup a fingerprint using the AcoustID webservice.
+            </summary>
+            <param name="fingerprint">The audio fingerprint.</param>
+            <param name="duration">The total duration of the audio.</param>
+            <param name="meta">Request meta information.</param>
+            <returns>A task which returns a <see cref="T:AcoustID.Web.LookupResponse"/>.</returns>
+        </member>
+        <member name="T:AcoustID.Web.Recording">
+            <summary>
+            Represents a recording.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.Recording.#ctor(System.Int32,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.Recording" /> class.
+            </summary>
+            <param name="duration">The duration (in seconds).</param>
+            <param name="id">The MusicBrainz ID.</param>
+            <param name="title">The title of the recording.</param>
+        </member>
+        <member name="P:AcoustID.Web.Recording.Duration">
+            <summary>
+            Gets the duration of the recording (seconds).
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Recording.Id">
+            <summary>
+            Gets the MusicBrainz id of the recording.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Recording.Title">
+            <summary>
+            Gets the title of the recording.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Recording.Artists">
+            <summary>
+            Gets the artists associated with the recording.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Recording.ReleaseGroups">
+            <summary>
+            Gets the release groups associated with the recording.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Recording.Releases">
+            <summary>
+            Gets the releases associated with the recording.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Web.Release">
+            <summary>
+            Represents a release.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.Release.#ctor(System.String,System.String,System.String,System.DateTime,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.Release" /> class.
+            </summary>
+            <param name="id">The MusicBrainz ID.</param>
+            <param name="title">The title of the release.</param>
+            <param name="country">The country of the release.</param>
+            <param name="date">The date of the release.</param>
+            <param name="tracks">The track-count of the release.</param>
+        </member>
+        <member name="P:AcoustID.Web.Release.Id">
+            <summary>
+            Gets the MusicBrainz id of the release.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Release.Title">
+            <summary>
+            Gets the title of the release.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Release.Country">
+            <summary>
+            Gets the country of the release.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Release.Date">
+            <summary>
+            Gets the date of the release.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Release.TrackCount">
+            <summary>
+            Gets the track-count of the release.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.Release.Artists">
+            <summary>
+            Gets the artists associated with the release.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Web.ReleaseGroup">
+            <summary>
+            Represents a release group.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.ReleaseGroup.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.ReleaseGroup" /> class.
+            </summary>
+            <param name="id">The MusicBrainz ID.</param>
+            <param name="title">The title of the release-group.</param>
+            <param name="type">The type of the release-group.</param>
+        </member>
+        <member name="P:AcoustID.Web.ReleaseGroup.Id">
+            <summary>
+            Gets the MusicBrainz id of the release group.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.ReleaseGroup.Title">
+            <summary>
+            Gets the title of the release group.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.ReleaseGroup.Type">
+            <summary>
+            Gets the type of the release group.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.ReleaseGroup.Artists">
+            <summary>
+            Gets the artists associated with the release group.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Web.SubmitRequest">
+            <summary>
+            Submit request data.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.Duration">
+            <summary>
+            Gets or sets the duration of the whole audio file in seconds.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.Fingerprint">
+            <summary>
+            Gets or sets the audio fingerprint data.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.Bitrate">
+            <summary>
+            Gets or sets the bitrate of the audio file.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.FileFormat">
+            <summary>
+            Gets or sets the file format of the audio file.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.MBID">
+            <summary>
+            Gets or sets the corresponding MusicBrainz recording ID.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.Title">
+            <summary>
+            Gets or sets the track title.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.Artist">
+            <summary>
+            Gets or sets the track artist.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.Album">
+            <summary>
+            Gets or sets the album title.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.AlbumArtist">
+            <summary>
+            Gets or sets the album artist.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.Year">
+            <summary>
+            Gets or sets the album release year.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.TrackNumber">
+            <summary>
+            Gets or sets the track number.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitRequest.DiscNumber">
+            <summary>
+            Gets or sets the disc number.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.SubmitRequest.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.SubmitRequest" /> class.
+            </summary>
+            <param name="fingerprint">The audio fingerprint.</param>
+            <param name="duration">The duration (in seconds).</param>
+        </member>
+        <member name="M:AcoustID.Web.SubmitRequest.WriteQueryString(System.IO.StreamWriter,System.Boolean,System.Int32)">
+            <summary>
+            Write the query string to given stream writer.
+            </summary>
+            <param name="writer">The stream writer.</param>
+            <param name="append">If true, an ampersand will be prepended.</param>
+            <param name="index">The batch index.</param>
+            <returns></returns>
+        </member>
+        <member name="T:AcoustID.Web.SubmitResponse">
+            <summary>
+            The webservice response containing the status code and a list of submit results.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.SubmitResponse.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.SubmitResponse" /> class.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.SubmitResponse.#ctor(System.Net.HttpStatusCode,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.SubmitResponse" /> class.
+            </summary>
+            <param name="status">The HTTP status code.</param>
+            <param name="error">The error message.</param>
+        </member>
+        <member name="P:AcoustID.Web.SubmitResponse.StatusCode">
+            <summary>
+            Gets the status code returned by the webservice.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitResponse.ErrorMessage">
+            <summary>
+            Gets the error message, in case the status code is not "200 OK".
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitResponse.Results">
+            <summary>
+            Gets a list of <see cref="T:AcoustID.Web.SubmitResult"/>s.
+            </summary>
+        </member>
+        <member name="T:AcoustID.Web.SubmitResult">
+            <summary>
+            Result of a submit request.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.SubmitResult.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.SubmitResult" /> class.
+            </summary>
+            <param name="id">The id of the submit</param>
+        </member>
+        <member name="M:AcoustID.Web.SubmitResult.#ctor(System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.SubmitResult" /> class.
+            </summary>
+            <param name="id">The id of the submit</param>
+            <param name="index">The index of the submit (only for batch submits).</param>
+            <param name="status">The status of the submit (pending or imported).</param>
+            <param name="acoustId">The AcoustID assigned of the submit.</param>
+        </member>
+        <member name="P:AcoustID.Web.SubmitResult.Id">
+            <summary>
+            Gets the id of the submit.
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitResult.Index">
+            <summary>
+            Gets the index of the submit (for batch submits).
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitResult.Status">
+            <summary>
+            Gets the status of the submit (pending or imported).
+            </summary>
+        </member>
+        <member name="P:AcoustID.Web.SubmitResult.AcoustId">
+            <summary>
+            Gets the assigned AcoustId of the submit (available if status is "imported").
+            </summary>
+        </member>
+        <member name="T:AcoustID.Web.SubmitService">
+            <summary>
+            Calls the AcoustId webservice to submit a new fingerprint.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.SubmitService.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.SubmitService" /> class.
+            </summary>
+            <param name="userKey">The user API key.</param>
+            <remarks>
+            Visit https://acoustid.org/api-key to get a user key.
+            </remarks>
+        </member>
+        <member name="M:AcoustID.Web.SubmitService.#ctor(System.String,AcoustID.Web.IResponseParser)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AcoustID.Web.SubmitService" /> class.
+            </summary>
+            <param name="userKey">The user API key.</param>
+            <param name="parser">The <see cref="T:AcoustID.Web.IResponseParser"/> instance.</param>
+            <remarks>
+            Visit https://acoustid.org/api-key to get a user key.
+            </remarks>
+        </member>
+        <member name="P:AcoustID.Web.SubmitService.UseCompression">
+            <summary>
+            Gets or sets a value indicating whether to compress the data before submit.
+            </summary>
+        </member>
+        <member name="M:AcoustID.Web.SubmitService.SubmitAsync(AcoustID.Web.SubmitRequest)">
+            <summary>
+            Submit audio data to the AcoustID webservice.
+            </summary>
+            <param name="request">The submit request data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AcoustID.Web.SubmitService.SubmitAsync(System.Collections.Generic.IEnumerable{AcoustID.Web.SubmitRequest})">
+            <summary>
+            Submit audio data to the AcoustID webservice.
+            </summary>
+            <param name="requests">The submit request data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AcoustID.Web.SubmitService.GetSubmitStatusAsync(AcoustID.Web.SubmitResult)">
+            <summary>
+            Get the status of a pending submission.
+            </summary>
+            <param name="submit">The pending submission.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AcoustID.Web.SubmitService.GetSubmitStatusAsync(System.Collections.Generic.IEnumerable{AcoustID.Web.SubmitResult})">
+            <summary>
+            Get the status of a number of pending submissions.
+            </summary>
+            <param name="submits">The pending submissions.</param>
+            <returns></returns>
+        </member>
+        <member name="T:AcoustID.Web.XmlResponseParser">
+            <summary>
+            Parses lookup and submit responses from the webservice (XML format).
+            </summary>
+            <remarks>
+            The parser will parse lookup responses that were requested using the ["recording"]
+            or ["recording", "releasegroup"] metadata parameters. If you need other metadata,
+            you will have to implement your own parser.
+            </remarks>
+        </member>
+        <member name="P:AcoustID.Web.XmlResponseParser.Format">
+            <inheritdoc />
+        </member>
+        <member name="M:AcoustID.Web.XmlResponseParser.CanParse(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:AcoustID.Web.XmlResponseParser.ParseLookupResponse(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:AcoustID.Web.XmlResponseParser.ParseSubmitResponse(System.String)">
+            <summary>
+            Parse the response of a submit request.
+            </summary>
+            <param name="text">The response string.</param>
+            <returns>List of submit results.</returns>
+        </member>
+    </members>
+</doc>

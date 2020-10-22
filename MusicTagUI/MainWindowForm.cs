@@ -13,6 +13,8 @@ namespace MusicTagUI
 {
     public partial class MainWindowForm : Form
     {
+        string file = @"C:\Users\dwaba\Desktop\Programowanie\test.mp3";
+
         public MainWindowForm()
         {
             InitializeComponent();
