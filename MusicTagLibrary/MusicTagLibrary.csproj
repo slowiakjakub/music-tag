@@ -51,11 +51,15 @@
     <Compile Include="APIHelper.cs" />
     <Compile Include="AudioBuffer.cs" />
     <Compile Include="DecodingProcessor.cs" />
+    <Compile Include="Models\ArtistModel.cs" />
+    <Compile Include="Models\LookupResultModel.cs" />
+    <Compile Include="Models\RecordingModel.cs" />
     <Compile Include="NAudioDecoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
