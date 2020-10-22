@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIHelper.cs" />
     <Compile Include="AudioBuffer.cs" />
+    <Compile Include="DecodingProcessor.cs" />
     <Compile Include="NAudioDecoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
