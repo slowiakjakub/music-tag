@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AcoustID.Audio;
 
-namespace MusicTagLibrary
+namespace MusicTagLibrary.AudioProcessing
 {
     /// <summary>
     /// Simple audio buffer.

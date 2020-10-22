@@ -49,12 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIHelper.cs" />
-    <Compile Include="AudioBuffer.cs" />
-    <Compile Include="DecodingProcessor.cs" />
+    <Compile Include="AudioProcessing\AudioBuffer.cs" />
+    <Compile Include="FingerprintProcessor.cs" />
     <Compile Include="Models\ArtistModel.cs" />
     <Compile Include="Models\LookupResultModel.cs" />
     <Compile Include="Models\RecordingModel.cs" />
-    <Compile Include="NAudioDecoder.cs" />
+    <Compile Include="AudioProcessing\NAudioDecoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AcoustID;
+using MusicTagLibrary.AudioProcessing;
 
 namespace MusicTagLibrary
 {
-    class DecodingProcessor
+    public class FingerprintProcessor
     {
         public static string GetFingerprintFromFile(string file)
         {

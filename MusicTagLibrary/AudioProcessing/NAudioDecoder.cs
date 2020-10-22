@@ -7,7 +7,7 @@ using AcoustID.Audio;
 using NAudio.Wave;
 using System.IO;
 
-namespace MusicTagLibrary
+namespace MusicTagLibrary.AudioProcessing
 {
     /// <summary>
     /// Decode audio files using the NAudio library (supports WAV and MP3).
