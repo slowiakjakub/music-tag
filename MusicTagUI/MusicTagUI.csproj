@@ -80,5 +80,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MusicTagLibrary\MusicTagLibrary.csproj">
+      <Project>{3A454E4F-F94E-4563-8EFC-FC5D199B548F}</Project>
+      <Name>MusicTagLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

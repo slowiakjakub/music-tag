@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace MusicTagLibrary.Models
 {
-    public class RecordingModel
+    public class LookupResponseModel
     {
-        public List<ArtistModel> Artists { get; set; }
-        public string Title { get; set; }
+        public List<LookupResultModel> Results { get; set; }
     }
 }

@@ -13,6 +13,8 @@ namespace MusicTagLibrary
         public static HttpClient ApiClient { get; set; }
         public static void InitializeClient()
         {
+            APIHelper.SetApplicationClientKey();
+
             ApiClient = new HttpClient();
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
