@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using MusicTagLibrary;
+using MusicTagLibrary.Models;
 using MusicTagLibrary.AudioProcessing;
 
 namespace MusicTagUI
 {
     public partial class MainWindowForm : Form
     {
-        string file = @"C:\Users\dwaba\Desktop\Programowanie\test2.mp3";
+        string file = @"C:\Users\dwaba\Desktop\Programowanie\test4.mp3";
 
         public MainWindowForm()
         {
@@ -39,11 +40,12 @@ namespace MusicTagUI
             string fp = FingerprintProcessor.GetFingerprintFromFile(file);
 
             int length = new NAudioDecoder(file).Length; // Gets Length of an audio file
+            // TODO - Make code better by using dependecy injection
+      
 
             var lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fp, length);
 
-            MessageBox.Show($"{lookupResponse.Results.First().Recordings.First().Title } - {lookupResponse.Results.First().Recordings.First().Artists.First().Name} ");
-
+            MessageBox.Show(lookupResponse.CreateBasicFileName());
         }
     }
 }
