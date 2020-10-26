@@ -17,7 +17,7 @@ namespace MusicTagUI
 {
     public partial class MainWindowForm : Form
     {
-        string file = @"C:\Users\dwaba\Desktop\Programowanie\skarbek.mp3";
+        string filePath;
 
         public MainWindowForm()
         {
@@ -32,20 +32,20 @@ namespace MusicTagUI
             ofd.Filter = "MP3|*.mp3";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                file = ofd.FileName;
+                filePath = ofd.FileName;
             }
         }
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
-            string fp = FingerprintProcessor.GetFingerprintFromFile(file);
+            string fp = FingerprintProcessor.GetFingerprintFromFile(filePath);
 
-            int length = new NAudioDecoder(file).Length; // Gets Length of an audio file
+            int length = new NAudioDecoder(filePath).Length; // Gets Length of an audio file
             // TODO - Make code better by using dependecy injection
       
             var lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fp, length);
 
-            FileProcessor.RenameFile(file, lookupResponse.CreateBasicFileName());
+            FileProcessor.RenameFile(filePath, lookupResponse.CreateBasicFileName());
         }
     }
 }
