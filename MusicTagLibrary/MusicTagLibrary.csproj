@@ -57,6 +57,7 @@
     <Compile Include="APIHelper.cs" />
     <Compile Include="AudioAPIDataProcessor.cs" />
     <Compile Include="AudioProcessing\AudioBuffer.cs" />
+    <Compile Include="DataAccess\FileProcessor.cs" />
     <Compile Include="FingerprintProcessor.cs" />
     <Compile Include="Models\ArtistModel.cs" />
     <Compile Include="Models\LookupResponseModel.cs" />

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using MusicTagLibrary;
+using MusicTagLibrary.DataAccess;
 using MusicTagLibrary.Models;
 using MusicTagLibrary.AudioProcessing;
 
@@ -16,7 +17,7 @@ namespace MusicTagUI
 {
     public partial class MainWindowForm : Form
     {
-        string file = @"C:\Users\dwaba\Desktop\Programowanie\test4.mp3";
+        string file = @"C:\Users\dwaba\Desktop\Programowanie\skarbek.mp3";
 
         public MainWindowForm()
         {
@@ -31,7 +32,7 @@ namespace MusicTagUI
             ofd.Filter = "MP3|*.mp3";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-
+                file = ofd.FileName;
             }
         }
 
@@ -42,10 +43,9 @@ namespace MusicTagUI
             int length = new NAudioDecoder(file).Length; // Gets Length of an audio file
             // TODO - Make code better by using dependecy injection
       
-
             var lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fp, length);
 
-            MessageBox.Show(lookupResponse.CreateBasicFileName());
+            FileProcessor.RenameFile(file, lookupResponse.CreateBasicFileName());
         }
     }
 }

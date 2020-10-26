@@ -8,6 +8,11 @@ namespace MusicTagLibrary.Models
 {
     public static class ModelHelper
     {
+        /// <summary>
+        /// Creates a name for the output file
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>A name for a file containing basic information about the song</returns>
         public static string CreateBasicFileName(this LookupResponseModel model)
         {
             string output = "";
