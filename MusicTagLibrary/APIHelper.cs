@@ -23,6 +23,5 @@ namespace MusicTagLibrary
         {
             AcoustID.Configuration.ClientKey = "pYEBEoFX0R";
         }
-
     }
 }

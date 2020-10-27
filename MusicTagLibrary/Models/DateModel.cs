@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace MusicTagLibrary.Models
 {
-    public class ArtistModel
+    public class DateModel
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public string Year { get; set; }
     }
 }

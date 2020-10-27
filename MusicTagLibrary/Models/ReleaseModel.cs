@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MusicTagLibrary.Models
 {
-    public class ArtistModel
+    public class ReleaseModel
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public List<ArtistModel> Artists { get; set; }
+        public DateModel Date { get; set; }
     }
 }
