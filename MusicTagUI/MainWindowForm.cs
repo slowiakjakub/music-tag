@@ -40,6 +40,7 @@ namespace MusicTagUI
         {
             string fp = FingerprintProcessor.GetFingerprintFromFile(filePath);
 
+
             int length = new NAudioDecoder(filePath).Length; // Gets Length of an audio file
             // TODO - Make code better by using dependecy injection
       

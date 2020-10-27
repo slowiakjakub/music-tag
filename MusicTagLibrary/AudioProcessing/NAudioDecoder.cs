@@ -80,7 +80,7 @@ namespace MusicTagLibrary.AudioProcessing
                     {
                         break;
                     }
-
+               
                     length = 2 * Math.Min(remaining, BUFFER_SIZE);
                 }
 
