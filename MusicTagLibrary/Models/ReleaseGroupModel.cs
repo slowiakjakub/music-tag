@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace MusicTagLibrary.Models
 {
-    public class RecordingModel
+    public class ReleaseGroupModel
     {
-        public List<ArtistModel> Artists { get; set; }
-        public List<ReleaseGroupModel> ReleaseGroups { get; set; }
+        public List<SecondaryType> secondaryTypes { get; set; }
         public string Title { get; set; }
+        public string Type { get; set; }
     }
 }

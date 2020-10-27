@@ -19,7 +19,7 @@ namespace MusicTagLibrary
         /// <returns>Information about audio stored in data models</returns>
         public static async Task<LookupResponseModel> LoadLookupData(string fingerprint, int duration)
         {
-            string url = $"https://api.acoustid.org/v2/lookup?client={ Configuration.ClientKey }&meta=recordings&duration={ duration }&fingerprint={ fingerprint }";
+            string url = $"https://api.acoustid.org/v2/lookup?client={ Configuration.ClientKey }&meta=recordings+releasegroups+compress&duration={ duration }&fingerprint={ fingerprint }";
 
             using (HttpResponseMessage response = await APIHelper.ApiClient.GetAsync(url))
             {
