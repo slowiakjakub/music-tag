@@ -15,21 +15,22 @@ namespace MusicTagLibrary.Models
         /// <returns>A name for a file containing basic information about the song</returns>
         public static string CreateBasicFileName(this LookupResponseModel model)
         {
+
             string output = "";
 
-            if(model.Results!=null)
+            bool isValidResults = false;
+            List<LookupResultModel> results = ModelValidator.TryGetValidLookupResults(model.Results, out isValidResults);
+
+            if (isValidResults)
             {
-                List<LookupResultModel> results = model.Results.Where(x => x.Recordings != null).ToList();
-                if (results!=null)
+                foreach (LookupResultModel result in results)
                 {
-                    foreach (LookupResultModel result in results)
+                    bool isValidRecordings = false;
+                    List<RecordingModel> recordings = ModelValidator.TryGetValidRecordings(result.Recordings, out isValidRecordings);
+                    if (isValidRecordings)
                     {
-                        List<RecordingModel> recordings = result.Recordings.Where((x => (x.Artists != null)&&(x.Title!=null))).ToList();
-                        if (recordings!=null)
-                        {
-                            output = $"{recordings.First().Artists.First().Name} - {recordings.First().Title}";
-                            return output;
-                        }
+                        output = $"{recordings.First().Artists.First().Name} - {recordings.First().Title}";
+                        return output;
                     }
                 }
             }
