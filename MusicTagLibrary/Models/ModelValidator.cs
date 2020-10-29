@@ -6,16 +6,23 @@ using System.Threading.Tasks;
 
 namespace MusicTagLibrary.Models
 {
-    public static class ModelValidator
+    public class ModelValidator
     {
-        public static List<LookupResultModel> TryGetValidLookupResults(List<LookupResultModel> results, out bool isValidResults)
+        LookupResponseModel modelToValidate;
+
+        public ModelValidator(LookupResponseModel model)
+        {
+            this.modelToValidate = model;
+        }
+
+        public List<LookupResultModel> TryGetValidLookupResults(out bool isValidResults)
         {
             List<LookupResultModel> output = new List<LookupResultModel>();
             isValidResults = false;
 
-            if (results.Count > 0)
+            if (modelToValidate.Results.Count > 0)
             {
-                output = results.Where(x => x.Recordings != null).ToList();
+                output = modelToValidate.Results.Where(x => x.Recordings != null).ToList();
                 if (output.Count > 0)
                 {
                     isValidResults = true;
@@ -24,7 +31,7 @@ namespace MusicTagLibrary.Models
 
             return output;
         }
-        public static List<RecordingModel> TryGetValidRecordings(List<RecordingModel> recordings, out bool isValidRecordings)
+        public List<RecordingModel> TryGetValidRecordings(List<RecordingModel> recordings, out bool isValidRecordings)
         {
             List<RecordingModel> output = new List<RecordingModel>();
             isValidRecordings = false;
@@ -41,7 +48,7 @@ namespace MusicTagLibrary.Models
             return output;
         }
 
-        public static List<ReleaseModel> TryGetValidReleases(List<ReleaseModel> releases, out bool isValidRelases)
+        public List<ReleaseModel> TryGetValidReleases(List<ReleaseModel> releases, out bool isValidRelases)
         {
             List<ReleaseModel> output = new List<ReleaseModel>();
             isValidRelases = false;
@@ -57,7 +64,7 @@ namespace MusicTagLibrary.Models
 
             return output;
         }
-        public static List<ReleaseGroupModel> GetReleaseGroupsBySpecificArtists(List<ReleaseGroupModel> releaseGroups,List<ArtistModel> artists)
+        public List<ReleaseGroupModel> GetReleaseGroupsBySpecificArtists(List<ReleaseGroupModel> releaseGroups,List<ArtistModel> artists)
         {
             List<ReleaseGroupModel> output = new List<ReleaseGroupModel>();
 

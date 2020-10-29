@@ -18,15 +18,17 @@ namespace MusicTagLibrary.Models
 
             string output = "";
 
+            ModelValidator modelValidator = new ModelValidator(model);
+
             bool isValidResults = false;
-            List<LookupResultModel> results = ModelValidator.TryGetValidLookupResults(model.Results, out isValidResults);
+            List<LookupResultModel> results = modelValidator.TryGetValidLookupResults(out isValidResults);
 
             if (isValidResults)
             {
                 foreach (LookupResultModel result in results)
                 {
                     bool isValidRecordings = false;
-                    List<RecordingModel> recordings = ModelValidator.TryGetValidRecordings(result.Recordings, out isValidRecordings);
+                    List<RecordingModel> recordings = modelValidator.TryGetValidRecordings(result.Recordings, out isValidRecordings);
                     if (isValidRecordings)
                     {
                         output = $"{recordings.First().Artists.First().Name} - {recordings.First().Title}";

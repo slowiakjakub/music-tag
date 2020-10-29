@@ -25,7 +25,6 @@ namespace MusicTagUI
             APIHelper.InitializeClient();
         }
 
-
         OpenFileDialog ofd = new OpenFileDialog();
         private void loadFileButton_Click(object sender, EventArgs e)
         {
@@ -40,7 +39,6 @@ namespace MusicTagUI
         {
             string fp = FingerprintProcessor.GetFingerprintFromFile(filePath);
 
-
             int length = new NAudioDecoder(filePath).Length; // Gets Length of an audio file
             // TODO - Make code better by using dependecy injection
       
@@ -48,7 +46,6 @@ namespace MusicTagUI
 
             FileTagger.TagFile(filePath,lookupResponse);
             FileProcessor.RenameFile(filePath, lookupResponse.CreateBasicFileName()); //TODO - filePath gets changed, think how to do it without problems
-
         }
     }
 }

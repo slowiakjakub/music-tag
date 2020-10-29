@@ -9,18 +9,21 @@ namespace MusicTagLibrary.DataAccess
 {
     public static class FileTagger
     {
+
         public static void TagFile(string filePath, LookupResponseModel model)
         {
+
             var tfile = TagLib.File.Create(filePath);
 
+            ModelValidator modelValidator = new ModelValidator(model);
 
             bool isValidResults = false;
-            List<LookupResultModel> validResults = ModelValidator.TryGetValidLookupResults(model.Results, out isValidResults);
+            List<LookupResultModel> validResults = modelValidator.TryGetValidLookupResults(out isValidResults);
 
             if (isValidResults)
             {
                 bool isValidRecordings = false;
-                List<RecordingModel> validRecordings = ModelValidator.TryGetValidRecordings(validResults.First().Recordings, out isValidRecordings);
+                List<RecordingModel> validRecordings = modelValidator.TryGetValidRecordings(validResults.First().Recordings, out isValidRecordings);
                 if (isValidRecordings)
                 {
                     RecordingModel firstValidRecording = validRecordings.First();
@@ -28,25 +31,28 @@ namespace MusicTagLibrary.DataAccess
                     tfile.Tag.Performers = firstValidRecording.GetAllArtistsNames();
                     tfile.Tag.Title = firstValidRecording.Title;
 
-                    List<ReleaseGroupModel> foundSongReleaseGroups = ModelValidator.GetReleaseGroupsBySpecificArtists(firstValidRecording.ReleaseGroups, firstValidRecording.Artists);
+                    List<ReleaseGroupModel> foundSongReleaseGroups = modelValidator.GetReleaseGroupsBySpecificArtists(firstValidRecording.ReleaseGroups, firstValidRecording.Artists);
 
                     if (foundSongReleaseGroups.Count > 0)
                     {
-
                         ReleaseGroupModel foundSongFirstReleaseGroup = foundSongReleaseGroups.First();
 
-                        bool isValidReleases = false;
-                        List<ReleaseModel> validReleases = ModelValidator.TryGetValidReleases(foundSongFirstReleaseGroup.Releases, out isValidReleases);
-
-                        if(isValidReleases)
+                        if (foundSongFirstReleaseGroup.Type.Equals("Album"))
                         {
-                            tfile.Tag.Year = 2018;//validReleases.First().Date
+                            if (foundSongFirstReleaseGroup.Title != null)
+                            {
+                                tfile.Tag.Album = foundSongFirstReleaseGroup.Title;
+                            }
                         }
+                        bool isValidReleases = false;
+                        List<ReleaseModel> validReleases = modelValidator.TryGetValidReleases(foundSongFirstReleaseGroup.Releases, out isValidReleases);
 
-
-
+                        if (isValidReleases)
+                        {
+                            ReleaseModel firstValidRelease = validReleases.First();
+                            tfile.Tag.Year = uint.Parse(firstValidRelease.Date.Year);
+                        }
                     }
-
                     tfile.Save();
                 }
             }
