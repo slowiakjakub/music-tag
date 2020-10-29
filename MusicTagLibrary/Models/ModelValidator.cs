@@ -48,7 +48,7 @@ namespace MusicTagLibrary.Models
 
             if(releases.Count>0)
             {
-                output = (List<ReleaseModel>) releases.Where(x => x.Date.Year != null).ToList();
+                output = releases.Where(x => x.Date.Year != null).ToList();
                 if(output.Count>0)
                 {
                     isValidRelases = true;
@@ -59,17 +59,11 @@ namespace MusicTagLibrary.Models
         }
         public static List<ReleaseGroupModel> GetReleaseGroupsBySpecificArtists(List<ReleaseGroupModel> releaseGroups,List<ArtistModel> artists)
         {
-            List<ReleaseGroupModel> artistReleaseGroups = new List<ReleaseGroupModel>();
+            List<ReleaseGroupModel> output = new List<ReleaseGroupModel>();
 
-            foreach (ReleaseGroupModel releaseGroup in releaseGroups)
-            {
-                if (releaseGroup.Artists.SequenceEqual(artists))
-                {
-                    artistReleaseGroups.Add(releaseGroup); // TODO - add some kind of sorting before comparing two lists
-                }
-            }
+            output = releaseGroups.Where(x => x.Artists.SequenceEqual(artists)).ToList();
 
-            return artistReleaseGroups;
+            return output;
 
         }
     }
