@@ -71,7 +71,7 @@ namespace MusicTagLibrary.Models
             output = releaseGroups.Where(x => x.Artists.SequenceEqual(artists)).ToList();
 
             return output;
-
         }
+
     }
 }

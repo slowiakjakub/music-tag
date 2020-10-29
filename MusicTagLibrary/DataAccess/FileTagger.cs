@@ -7,15 +7,22 @@ using MusicTagLibrary.Models;
 
 namespace MusicTagLibrary.DataAccess
 {
-    public static class FileTagger
+    public class FileTagger
     {
+        public string filePath;
+        public LookupResponseModel lookupResponse;
 
-        public static void TagFile(string filePath, LookupResponseModel model)
+        public FileTagger(string filePath,LookupResponseModel lookupResponse)
         {
+            this.filePath = filePath;
+            this.lookupResponse = lookupResponse;
+        }
 
+        public void TagFile()
+        {
             var tfile = TagLib.File.Create(filePath);
 
-            ModelValidator modelValidator = new ModelValidator(model);
+            ModelValidator modelValidator = new ModelValidator(lookupResponse);
 
             bool isValidResults = false;
             List<LookupResultModel> validResults = modelValidator.TryGetValidLookupResults(out isValidResults);
