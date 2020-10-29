@@ -40,6 +40,23 @@ namespace MusicTagLibrary.Models
 
             return output;
         }
+
+        public static List<ReleaseModel> TryGetValidReleases(List<ReleaseModel> releases, out bool isValidRelases)
+        {
+            List<ReleaseModel> output = new List<ReleaseModel>();
+            isValidRelases = false;
+
+            if(releases.Count>0)
+            {
+                output = (List<ReleaseModel>) releases.Where(x => x.Date.Year != null).ToList();
+                if(output.Count>0)
+                {
+                    isValidRelases = true;
+                }
+            }
+
+            return output;
+        }
         public static List<ReleaseGroupModel> GetReleaseGroupsBySpecificArtists(List<ReleaseGroupModel> releaseGroups,List<ArtistModel> artists)
         {
             List<ReleaseGroupModel> artistReleaseGroups = new List<ReleaseGroupModel>();

@@ -28,13 +28,24 @@ namespace MusicTagLibrary.DataAccess
                     tfile.Tag.Performers = firstValidRecording.GetAllArtistsNames();
                     tfile.Tag.Title = firstValidRecording.Title;
 
-                    //List<ReleaseGroupModel> foundSongReleaseGroups = ModelValidator.GetReleaseGroupsBySpecificArtists(firstValidRecording.ReleaseGroups, firstValidRecording.Artists);
+                    List<ReleaseGroupModel> foundSongReleaseGroups = ModelValidator.GetReleaseGroupsBySpecificArtists(firstValidRecording.ReleaseGroups, firstValidRecording.Artists);
 
-                    //if (foundSongReleaseGroups.Count > 0)
-                    //{
-                    //    foundSongReleaseGroups.First();
+                    if (foundSongReleaseGroups.Count > 0)
+                    {
 
-                    //}
+                        ReleaseGroupModel foundSongFirstReleaseGroup = foundSongReleaseGroups.First();
+
+                        bool isValidReleases = false;
+                        List<ReleaseModel> validReleases = ModelValidator.TryGetValidReleases(foundSongFirstReleaseGroup.Releases, out isValidReleases);
+
+                        if(isValidReleases)
+                        {
+                            tfile.Tag.Year = 2018;//validReleases.First().Date
+                        }
+
+
+
+                    }
 
                     tfile.Save();
                 }
