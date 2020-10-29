@@ -40,5 +40,20 @@ namespace MusicTagLibrary.Models
 
             return output;
         }
+        public static List<ReleaseGroupModel> GetReleaseGroupsBySpecificArtists(List<ReleaseGroupModel> releaseGroups,List<ArtistModel> artists)
+        {
+            List<ReleaseGroupModel> artistReleaseGroups = new List<ReleaseGroupModel>();
+
+            foreach (ReleaseGroupModel releaseGroup in releaseGroups)
+            {
+                if (releaseGroup.Artists.SequenceEqual(artists))
+                {
+                    artistReleaseGroups.Add(releaseGroup); // TODO - add some kind of sorting before comparing two lists
+                }
+            }
+
+            return artistReleaseGroups;
+
+        }
     }
 }

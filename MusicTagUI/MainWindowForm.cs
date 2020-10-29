@@ -46,7 +46,9 @@ namespace MusicTagUI
       
             var lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fp, length);
 
-            FileProcessor.RenameFile(filePath, lookupResponse.CreateBasicFileName());
+            FileTagger.TagFile(filePath,lookupResponse);
+            FileProcessor.RenameFile(filePath, lookupResponse.CreateBasicFileName()); //TODO - filePath gets changed, think how to do it without problems
+
         }
     }
 }
