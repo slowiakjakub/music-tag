@@ -73,7 +73,6 @@
     <Compile Include="AudioProcessing\NAudioDecoder.cs" />
     <Compile Include="Models\ReleaseGroupModel.cs" />
     <Compile Include="Models\ReleaseModel.cs" />
-    <Compile Include="Models\TagModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
