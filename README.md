@@ -10,11 +10,10 @@ MusicTag is an application that helps you organize your music library located at
 MusicTag is based on a [Chromaprint](https://github.com/acoustid/chromaprint) fingerprint-generation alghorithm, which prefers full audio files instead of short, noisy audio recordings (ie. song recorded with a phone, humming).
 
 # How does it work?
-Firstly, MusicTag takes an audio file and decompress it into raw PCM format. Then it creates unique compact fingerprint, that allows to identify a song by sending a request to an AcousticID API. MusicTag takes care of returned data, filters it, and saves it to a specific file.
+Firstly, MusicTag takes an audio file and decompress it into raw PCM format. Then it creates unique compact fingerprint, that allows to identify a song by sending a request to an AcousticID API. MusicTag takes care of returned data, filters it, and tags it into a specific file.
 
 # What is special about MusicTag?
 AcousticID Web service returns variety of results from MusicBrainz database. In majority of music tagging apps, different results are displayed to the end user which can be a little confusing. MusicTag filters out all the unnecessary data and gives only the most valuable one to the end-user.
-
 
 # External libraries
 MusicTag makes use of:<br/>
