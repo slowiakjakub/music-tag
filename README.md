@@ -1,5 +1,7 @@
 # MusicTag
 MusicTag is an application that helps you organize your music library located at your computer. It uses [AcousticID](https://acoustid.org) audio identification service, so it can identify your music files by their contents and not their other meta fields. MusicTag even lets you rename your MP3 files based on the tag information.
+#### Note:
+MusicTag it's still under development and new updates are regularly coming up, however, you can still download the most working and up to date version from the **main** branch.
 
 # Features
 •Supports MP3/WAV audio formats.<br/>
