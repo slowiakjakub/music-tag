@@ -26,7 +26,6 @@ namespace MusicTagLibrary
                 if(response.IsSuccessStatusCode)
                 {
                     LookupResponseModel lookupResponse = await response.Content.ReadAsAsync<LookupResponseModel>();
-
                     return lookupResponse;
                 }
                 else
