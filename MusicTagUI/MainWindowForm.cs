@@ -28,7 +28,7 @@ namespace MusicTagUI
         OpenFileDialog ofd = new OpenFileDialog();
         private void loadFileButton_Click(object sender, EventArgs e)
         {
-            ofd.Filter = "MP3|*.mp3";
+            ofd.Filter = "MP3 audio file|*.mp3";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 filePath = ofd.FileName;
