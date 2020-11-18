@@ -47,7 +47,8 @@ namespace MusicTagUI
             FileTagger fileTagger = new FileTagger(filePath,lookupResponse);
 
             fileTagger.TagFile();
-            FileProcessor.RenameFile(filePath, lookupResponse.CreateBasicFileName()); //TODO - filePath gets changed, think how to do it without problems
+            FileProcessor.RenameFile(ref filePath, lookupResponse.CreateBasicFileName()); //TODO - filePath gets changed, think how to do it without problems
+
         }
     }
 }

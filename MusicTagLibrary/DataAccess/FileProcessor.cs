@@ -9,12 +9,14 @@ namespace MusicTagLibrary.DataAccess
 {
     public static class FileProcessor
     {
-        public static void RenameFile(string sourceFilePath, string finalFileName)
+        public static void RenameFile(ref string sourceFilePath, string finalFileName)
         {
             FileInfo fi = new FileInfo(sourceFilePath);
             if(fi.Exists)
             {
-                fi.MoveTo($@"{fi.Directory.FullName}\{finalFileName}.mp3");
+                string newFilePath = $@"{fi.Directory.FullName}\{finalFileName}.mp3";
+                fi.MoveTo(newFilePath);
+                sourceFilePath = newFilePath;
             }
         }
     }
