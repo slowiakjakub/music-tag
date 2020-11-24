@@ -12,6 +12,7 @@ using MusicTagLibrary;
 using MusicTagLibrary.DataAccess;
 using MusicTagLibrary.Models;
 using MusicTagLibrary.AudioProcessing;
+using System.Net.Http;
 
 namespace MusicTagUI
 {
@@ -39,16 +40,29 @@ namespace MusicTagUI
         {
             string fp = FingerprintProcessor.GetFingerprintFromFile(filePath);
 
-            int length = new NAudioDecoder(filePath).Length; // Gets Length of an audio file
-            // TODO - Make code better by using dependecy injection
-      
-            var lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fp, length);
+            int length = new NAudioDecoder(filePath).Length; // TODO - Make code better by using dependecy injection
 
-            FileTagger fileTagger = new FileTagger(filePath,lookupResponse);
+            try
+            {
+                var lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fp, length);
 
-            fileTagger.TagFile();
-            FileProcessor.RenameFile(ref filePath, lookupResponse.CreateBasicFileName()); //TODO - filePath gets changed, think how to do it without problems
+                if (lookupResponse.Results.Count > 0) // In case we got results from the lookup
+                {
+                    FileTagger fileTagger = new FileTagger(filePath, lookupResponse);
 
+                    fileTagger.TagFile();
+                    
+                    FileProcessor.RenameFile(ref filePath, lookupResponse.CreateBasicFileName());
+                }
+                else
+                {
+                    MessageBox.Show("Cannot recognize a song.");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                MessageBox.Show("Connection to AcousticID API failed: " + Environment.NewLine + ex.Message);
+            }
         }
     }
 }

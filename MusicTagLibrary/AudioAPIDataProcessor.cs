@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MusicTagLibrary.Models;
 using AcoustID;
 using System.Net.Http;
+using System.Web.Http;
 
 namespace MusicTagLibrary
 {
@@ -30,7 +31,7 @@ namespace MusicTagLibrary
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw new HttpRequestException(response.ReasonPhrase);
                 }
             }
         }
