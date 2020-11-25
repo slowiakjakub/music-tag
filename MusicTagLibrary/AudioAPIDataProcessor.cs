@@ -20,11 +20,11 @@ namespace MusicTagLibrary
         /// <returns>Information about audio stored in data models</returns>
         public static async Task<LookupResponseModel> LoadLookupData(string fingerprint, int duration)
         {
-            var dict = new Dictionary<string, string>();
-            dict.Add("client", Configuration.ClientKey);
-            dict.Add("fingerprint", fingerprint);
-            dict.Add("duration", $"{duration}");
-            var content = new FormUrlEncodedContent(dict);        
+            var body = new Dictionary<string, string>();
+            body.Add("client", Configuration.ClientKey);
+            body.Add("fingerprint", fingerprint);
+            body.Add("duration", $"{duration}");
+            var content = new FormUrlEncodedContent(body);        
 
             string url = $"https://api.acoustid.org/v2/lookup?&meta=recordings+releasegroups+releases";
 
