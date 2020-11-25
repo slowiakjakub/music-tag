@@ -14,7 +14,7 @@ namespace MusicTagLibrary.DataAccess
             FileInfo fi = new FileInfo(sourceFilePath);
             if(fi.Exists)
             {
-                string newFilePath = $@"{fi.Directory.FullName}\{finalFileName}.mp3";
+                string newFilePath = $@"{fi.Directory.FullName}\{finalFileName}{fi.Extension}";
                 fi.MoveTo(newFilePath);
                 sourceFilePath = newFilePath;
             }
