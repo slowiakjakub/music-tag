@@ -14,7 +14,6 @@ namespace MusicTagLibrary
         {
             AudioBuffer bfr = new AudioBuffer();
             NAudioDecoder decoder = new NAudioDecoder(file);
-
             decoder.Decode(bfr, decoder.Length);
 
             //At this point mp3 file is decoded into bfr.data[] 

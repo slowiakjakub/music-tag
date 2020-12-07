@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -38,30 +39,42 @@ namespace MusicTagUI
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
-            string fp = FingerprintProcessor.GetFingerprintFromFile(filePath);
-
-            int length = new NAudioDecoder(filePath).Length; // TODO - Make code better by using dependecy injection
+            string fp;
+            int length = 0;
 
             try
             {
-                var lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fp, length);
+                fp = FingerprintProcessor.GetFingerprintFromFile(filePath);
+                length = new NAudioDecoder(filePath).Length; // TODO - Make code better by using dependecy injection
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was a problem processing your file." + Environment.NewLine + "Error Info: " + ex.Message);
+                return;
+            }
 
-                if (lookupResponse.Results.Count > 0) // In case we got results from the lookup
-                {
-                    FileTagger fileTagger = new FileTagger(filePath, lookupResponse);
-
-                    fileTagger.TagFile();
-                    
-                    FileProcessor.RenameFile(ref filePath, lookupResponse.CreateBasicFileName());
-                }
-                else
-                {
-                    MessageBox.Show("Cannot recognize a song.");
-                }
+            LookupResponseModel lookupResponse;
+            try
+            {
+                lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fp, length);
             }
             catch (HttpRequestException ex)
             {
                 MessageBox.Show("Connection to AcousticID API failed: " + Environment.NewLine + ex.Message);
+                return;
+            }
+
+            if (lookupResponse.Results.Count > 0) // In case we got results from the lookup
+            {
+                FileTagger fileTagger = new FileTagger(filePath, lookupResponse);
+
+                fileTagger.TagFile();
+
+                FileProcessor.RenameFile(ref filePath, lookupResponse.CreateBasicFileName());
+            }
+            else
+            {
+                MessageBox.Show("Cannot recognize a song.");
             }
         }
     }
