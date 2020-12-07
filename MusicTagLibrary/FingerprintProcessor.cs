@@ -10,17 +10,16 @@ namespace MusicTagLibrary
 {
     public class FingerprintProcessor
     {
-        public static string GetFingerprintFromFile(string file)
+        public static string GetFingerprintFromFile(NAudioDecoder decodedFile)
         {
             AudioBuffer bfr = new AudioBuffer();
-            NAudioDecoder decoder = new NAudioDecoder(file);
-            decoder.Decode(bfr, decoder.Length);
+            decodedFile.Decode(bfr, decodedFile.Length);
 
             //At this point mp3 file is decoded into bfr.data[] 
 
             ChromaContext ctx = new ChromaContext();
 
-            ctx.Start(decoder.SampleRate, decoder.Channels);
+            ctx.Start(decodedFile.SampleRate, decodedFile.Channels);
             ctx.Feed(bfr.data, bfr.data.Length);
             ctx.Finish();
 

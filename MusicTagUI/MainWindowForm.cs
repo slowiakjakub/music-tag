@@ -14,6 +14,7 @@ using MusicTagLibrary.DataAccess;
 using MusicTagLibrary.Models;
 using MusicTagLibrary.AudioProcessing;
 using System.Net.Http;
+using System.IO;
 
 namespace MusicTagUI
 {
@@ -39,24 +40,25 @@ namespace MusicTagUI
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
-            string fp;
-            int length = 0;
+            string fingerprint;
+            NAudioDecoder decodedFile;
 
             try
             {
-                fp = FingerprintProcessor.GetFingerprintFromFile(filePath);
-                length = new NAudioDecoder(filePath).Length; // TODO - Make code better by using dependecy injection
+                decodedFile = new NAudioDecoder(filePath);
             }
-            catch (Exception ex)
+            catch (Exception ex) when ((ex is InvalidOperationException)||(ex is InvalidDataException))
             {
                 MessageBox.Show("There was a problem processing your file." + Environment.NewLine + "Error Info: " + ex.Message);
                 return;
             }
 
+            fingerprint = FingerprintProcessor.GetFingerprintFromFile(decodedFile);
+
             LookupResponseModel lookupResponse;
             try
             {
-                lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fp, length);
+                lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fingerprint, decodedFile.Length);
             }
             catch (HttpRequestException ex)
             {
