@@ -40,7 +40,6 @@ namespace MusicTagUI
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
-
             LookupResponseModel lookupResponse;
             try
             {
