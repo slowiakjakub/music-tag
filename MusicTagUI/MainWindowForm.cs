@@ -45,11 +45,19 @@ namespace MusicTagUI
             try
             {
                 NAudioDecoder decodedFile = new NAudioDecoder(filePath);
-                string fingerprint = FingerprintProcessor.GetFingerprintFromFile(decodedFile);
-
-                lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fingerprint, decodedFile.Length);
+                if (decodedFile.Length >= 30)
+                {
+                    string fingerprint = FingerprintProcessor.GetFingerprintFromFile(decodedFile);
+                    lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fingerprint, decodedFile.Length);
+                }
+                else
+                {
+                    MessageBox.Show($"Your audio file is too short!{Environment.NewLine}" +
+                        $"It should be 30 seconds minimum!");
+                    return;
+                }
             }
-            catch (Exception ex) when ((ex is InvalidOperationException)||(ex is InvalidDataException))
+            catch (Exception ex) when ((ex is InvalidOperationException) || (ex is InvalidDataException))
             {
                 MessageBox.Show("There was a problem processing your file." + Environment.NewLine + "Error Info: " + ex.Message);
                 return;
@@ -72,7 +80,6 @@ namespace MusicTagUI
             {
                 MessageBox.Show("Cannot recognize a song.");
             }
-
         }
     }
 }
