@@ -10,6 +10,7 @@ namespace MusicTagLibrary
 {
     public class FingerprintProcessor
     {
+        public const int MinimumLengthForGeneratingFingerprint = 30;
         public static string GetFingerprintFromFile(NAudioDecoder decodedFile)
         {
             AudioBuffer bfr = new AudioBuffer();

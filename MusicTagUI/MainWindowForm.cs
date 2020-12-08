@@ -45,7 +45,7 @@ namespace MusicTagUI
             try
             {
                 NAudioDecoder decodedFile = new NAudioDecoder(filePath);
-                if (decodedFile.Length >= 30)
+                if (decodedFile.Length >= FingerprintProcessor.MinimumLengthForGeneratingFingerprint)
                 {
                     string fingerprint = FingerprintProcessor.GetFingerprintFromFile(decodedFile);
                     lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fingerprint, decodedFile.Length);
