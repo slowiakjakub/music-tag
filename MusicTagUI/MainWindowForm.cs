@@ -40,25 +40,19 @@ namespace MusicTagUI
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
-            string fingerprint;
-            NAudioDecoder decodedFile;
 
+            LookupResponseModel lookupResponse;
             try
             {
-                decodedFile = new NAudioDecoder(filePath);
+                NAudioDecoder decodedFile = new NAudioDecoder(filePath);
+                string fingerprint = FingerprintProcessor.GetFingerprintFromFile(decodedFile);
+
+                lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fingerprint, decodedFile.Length);
             }
             catch (Exception ex) when ((ex is InvalidOperationException)||(ex is InvalidDataException))
             {
                 MessageBox.Show("There was a problem processing your file." + Environment.NewLine + "Error Info: " + ex.Message);
                 return;
-            }
-
-            fingerprint = FingerprintProcessor.GetFingerprintFromFile(decodedFile);
-
-            LookupResponseModel lookupResponse;
-            try
-            {
-                lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fingerprint, decodedFile.Length);
             }
             catch (HttpRequestException ex)
             {
@@ -78,6 +72,7 @@ namespace MusicTagUI
             {
                 MessageBox.Show("Cannot recognize a song.");
             }
+
         }
     }
 }
