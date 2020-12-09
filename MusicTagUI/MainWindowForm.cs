@@ -40,21 +40,16 @@ namespace MusicTagUI
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
-            LookupResponseModel lookupResponse;
+            
             try
             {
-                NAudioDecoder decodedFile = new NAudioDecoder(filePath);
-                if (decodedFile.Length >= FingerprintProcessor.MinimumLengthForGeneratingFingerprint)
-                {
-                    string fingerprint = FingerprintProcessor.GetFingerprintFromFile(decodedFile);
-                    lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fingerprint, decodedFile.Length);
-                }
-                else
-                {
-                    MessageBox.Show($"Your audio file is too short!{Environment.NewLine}" +
-                        $"It should be 30 seconds minimum!");
-                    return;
-                }
+                MusicRecognizer.RunMusicTagForAudioFile(filePath);
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show($"Your audio file is too short!{Environment.NewLine}" +
+                    $"It should be 30 seconds minimum!");
+                return;
             }
             catch (Exception ex) when ((ex is InvalidOperationException) || (ex is InvalidDataException))
             {
@@ -65,15 +60,6 @@ namespace MusicTagUI
             {
                 MessageBox.Show("Connection to AcousticID API failed: " + Environment.NewLine + ex.Message);
                 return;
-            }
-
-            if (lookupResponse.Results.Count > 0) // In case we got results from the lookup
-            {
-                FileTagger fileTagger = new FileTagger(filePath, lookupResponse);
-
-                fileTagger.TagFile();
-
-                FileProcessor.RenameFile(ref filePath, lookupResponse.CreateBasicFileName());
             }
             else
             {
