@@ -13,6 +13,7 @@ using MusicTagLibrary;
 using MusicTagLibrary.DataAccess;
 using MusicTagLibrary.Models;
 using MusicTagLibrary.AudioProcessing;
+using MusicTagLibrary.Exceptions;
 using System.Net.Http;
 using System.IO;
 
@@ -40,12 +41,11 @@ namespace MusicTagUI
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
-            
-            try
+            try // catching exceptions don't work, because method is async
             {
                 MusicRecognizer.RunMusicTagForAudioFile(filePath);
             }
-            catch (ArgumentException)
+            catch (AudioTooShortException)
             {
                 MessageBox.Show($"Your audio file is too short!{Environment.NewLine}" +
                     $"It should be 30 seconds minimum!");
@@ -61,10 +61,10 @@ namespace MusicTagUI
                 MessageBox.Show("Connection to AcousticID API failed: " + Environment.NewLine + ex.Message);
                 return;
             }
-            else
-            {
-                MessageBox.Show("Cannot recognize a song.");
-            }
+            //else
+            //{
+            //    MessageBox.Show("Cannot recognize a song.");
+            //}
         }
     }
 }

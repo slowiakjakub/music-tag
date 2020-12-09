@@ -1,6 +1,7 @@
 ﻿using MusicTagLibrary.AudioProcessing;
 using MusicTagLibrary.DataAccess;
 using MusicTagLibrary.Models;
+using MusicTagLibrary.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MusicTagLibrary
 {
-    public static class MusicRecognizer
+    public class MusicRecognizer
     {
         public static async void RunMusicTagForAudioFile(string filePath)
         {
@@ -23,7 +24,7 @@ namespace MusicTagLibrary
             }
             else
             {
-                throw new ArgumentException("Audio file's duration is too small.");
+                throw new AudioTooShortException("Audio file's duration is too small.");
             }
 
             if (lookupResponse.Results.Count > 0) // In case we got results from the lookup
