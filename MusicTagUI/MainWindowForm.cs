@@ -43,28 +43,34 @@ namespace MusicTagUI
         {
             try 
             {
-                await MusicRecognizer.RunMusicTagForAudioFileAsync(filePath);
+                runMusictagButton.Enabled = false;
+                await MusicRecognizer.RunMusicTagForAudioFileAsync(filePath); // TODO - keep filePath actualized, you lose it after the file got renamed.
             }
             catch (AudioTooShortException)
             {
                 MessageBox.Show($"Your audio file is too short!{Environment.NewLine}" +
-                    $"It should be 30 seconds minimum!");
+                    $"It should be 30 seconds minimum!", "Invalid file", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             catch (Exception ex) when ((ex is InvalidOperationException) || (ex is InvalidDataException))
             {
-                MessageBox.Show("There was a problem processing your file." + Environment.NewLine + "Error Info: " + ex.Message);
+                MessageBox.Show("There was a problem processing your file." + Environment.NewLine + "Error Info: " + ex.Message, "Invalid file", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             catch (HttpRequestException ex)
             {
-                MessageBox.Show("Connection to AcousticID API failed: " + Environment.NewLine + ex.Message);
+                MessageBox.Show("Connection to AcousticID API failed: " + Environment.NewLine + ex.Message, "Connection problem", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             catch (ResultsArrayEmptyException)
             {
-                MessageBox.Show("Cannot recognize a song.");
+                MessageBox.Show("Cannot recognize a song.", "No results", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            finally
+            {
+                runMusictagButton.Enabled = true;
+            }
+            MessageBox.Show("Your song was sucesfully recognized and renamed!","Tagging succesful!",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
     }
 }
