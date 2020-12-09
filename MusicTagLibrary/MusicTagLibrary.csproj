@@ -63,6 +63,7 @@
     <Compile Include="DataAccess\FileProcessor.cs" />
     <Compile Include="DataAccess\FileTagger.cs" />
     <Compile Include="Exceptions\AudioTooShortException.cs" />
+    <Compile Include="Exceptions\ResultsArrayEmptyException.cs" />
     <Compile Include="FingerprintProcessor.cs" />
     <Compile Include="Models\ArtistModel.cs" />
     <Compile Include="Models\DateModel.cs" />

@@ -19,7 +19,7 @@ namespace MusicTagLibrary
             NAudioDecoder decodedFile = new NAudioDecoder(filePath);
             if (decodedFile.Length >= FingerprintProcessor.MinimumLengthForGeneratingFingerprint)
             {
-                string fingerprint = FingerprintProcessor.GetFingerprintFromFile(decodedFile);
+                string fingerprint = await Task.Run(() => FingerprintProcessor.GetFingerprintFromFile(decodedFile));
                 lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fingerprint, decodedFile.Length);
             }
             else
@@ -37,7 +37,7 @@ namespace MusicTagLibrary
             }
             else
             {
-                //throw new
+                throw new ResultsArrayEmptyException("There is no matching song in a database.");
             }
         }
     }

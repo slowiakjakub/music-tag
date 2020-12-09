@@ -43,7 +43,7 @@ namespace MusicTagUI
         {
             try 
             {
-                await MusicRecognizer.RunMusicTagForAudioFile(filePath);
+                await MusicRecognizer.RunMusicTagForAudioFileAsync(filePath);
             }
             catch (AudioTooShortException)
             {
@@ -61,10 +61,10 @@ namespace MusicTagUI
                 MessageBox.Show("Connection to AcousticID API failed: " + Environment.NewLine + ex.Message);
                 return;
             }
-            //else
-            //{
-            //    MessageBox.Show("Cannot recognize a song.");
-            //}
+            catch (ResultsArrayEmptyException)
+            {
+                MessageBox.Show("Cannot recognize a song.");
+            }
         }
     }
 }
