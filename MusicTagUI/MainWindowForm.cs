@@ -41,9 +41,9 @@ namespace MusicTagUI
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
-            try // catching exceptions don't work, because method is async
+            try 
             {
-                MusicRecognizer.RunMusicTagForAudioFile(filePath);
+                await MusicRecognizer.RunMusicTagForAudioFile(filePath);
             }
             catch (AudioTooShortException)
             {
