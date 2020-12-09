@@ -12,7 +12,7 @@ namespace MusicTagLibrary
 {
     public class MusicRecognizer
     {
-        public static async Task RunMusicTagForAudioFile(string filePath) // TODO - make task fully asynchronous
+        public static async Task RunMusicTagForAudioFileAsync(string filePath) // TODO - make task fully asynchronous
         {
             LookupResponseModel lookupResponse;
 
