@@ -43,7 +43,7 @@ namespace MusicTagUI
         {
             try 
             {
-                await MusicRecognizer.RunMusicTagForAudioFileAsync(filePath);
+                await MusicRecognizer.RunMusicTagForAudioFileAsync(ref filePath);
             }
             catch (AudioTooShortException)
             {
