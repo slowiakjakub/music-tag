@@ -12,14 +12,14 @@ namespace MusicTagLibrary
 {
     public class MusicRecognizer
     {
-        public static async Task RunMusicTagForAudioFileAsync(string filePath) // TODO - make task fully asynchronous
+        public static async Task RunMusicTagForAudioFileAsync(ref string filePath) // TODO - make task fully asynchronous
         {
             LookupResponseModel lookupResponse;
 
             NAudioDecoder decodedFile = new NAudioDecoder(filePath);
             if (decodedFile.Length >= FingerprintProcessor.MinimumLengthForGeneratingFingerprint)
             {
-                string fingerprint = await Task.Run(() => FingerprintProcessor.GetFingerprintFromFile(decodedFile));
+                string fingerprint = await (Task.Run(() => FingerprintProcessor.GetFingerprintFromFile(decodedFile)));
                 lookupResponse = await AudioAPIDataProcessor.LoadLookupData(fingerprint, decodedFile.Length);
             }
             else
