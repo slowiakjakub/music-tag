@@ -45,6 +45,7 @@
             // 
             // runMusictagButton
             // 
+            this.runMusictagButton.Enabled = false;
             this.runMusictagButton.Location = new System.Drawing.Point(125, 311);
             this.runMusictagButton.Name = "runMusictagButton";
             this.runMusictagButton.Size = new System.Drawing.Size(214, 75);

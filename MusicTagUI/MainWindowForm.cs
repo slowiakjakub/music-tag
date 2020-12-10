@@ -36,6 +36,7 @@ namespace MusicTagUI
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 filePath = ofd.FileName;
+                runMusictagButton.Enabled = true;
             }
         }
 
@@ -65,10 +66,6 @@ namespace MusicTagUI
             catch (ResultsArrayEmptyException)
             {
                 MessageBox.Show("Cannot recognize a song.", "No results", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            finally
-            {
-                runMusictagButton.Enabled = true;
             }
             MessageBox.Show("Your song was sucesfully recognized and renamed!","Tagging succesful!",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
