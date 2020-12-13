@@ -44,6 +44,7 @@ namespace MusicTagUI
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
+            progressStatusLabel.Text = "Running MusicTag..";
             runMusictagButton.Enabled = false;
             try
             {
