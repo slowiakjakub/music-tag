@@ -35,7 +35,7 @@
             // 
             // loadFileButton
             // 
-            this.loadFileButton.Location = new System.Drawing.Point(159, 193);
+            this.loadFileButton.Location = new System.Drawing.Point(170, 170);
             this.loadFileButton.Name = "loadFileButton";
             this.loadFileButton.Size = new System.Drawing.Size(144, 45);
             this.loadFileButton.TabIndex = 1;
@@ -46,9 +46,9 @@
             // runMusictagButton
             // 
             this.runMusictagButton.Enabled = false;
-            this.runMusictagButton.Location = new System.Drawing.Point(125, 311);
+            this.runMusictagButton.Location = new System.Drawing.Point(150, 270);
             this.runMusictagButton.Name = "runMusictagButton";
-            this.runMusictagButton.Size = new System.Drawing.Size(214, 75);
+            this.runMusictagButton.Size = new System.Drawing.Size(184, 75);
             this.runMusictagButton.TabIndex = 2;
             this.runMusictagButton.Text = "Run MusicTag !";
             this.runMusictagButton.UseVisualStyleBackColor = true;
