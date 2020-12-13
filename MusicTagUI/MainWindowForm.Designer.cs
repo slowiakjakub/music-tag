@@ -57,12 +57,12 @@
             // 
             // loadedFileLabel
             // 
-            this.loadedFileLabel.AutoSize = true;
-            this.loadedFileLabel.Location = new System.Drawing.Point(150, 228);
+            this.loadedFileLabel.Location = new System.Drawing.Point(-1, 227);
             this.loadedFileLabel.Name = "loadedFileLabel";
-            this.loadedFileLabel.Size = new System.Drawing.Size(120, 30);
+            this.loadedFileLabel.Size = new System.Drawing.Size(482, 30);
             this.loadedFileLabel.TabIndex = 3;
             this.loadedFileLabel.Text = "Loaded file:";
+            this.loadedFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainWindowForm
             // 
@@ -80,7 +80,6 @@
             this.Name = "MainWindowForm";
             this.Text = "Music Tag";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
