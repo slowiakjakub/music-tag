@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindowForm));
             this.loadFileButton = new System.Windows.Forms.Button();
             this.runMusictagButton = new System.Windows.Forms.Button();
+            this.loadedFileLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // loadFileButton
@@ -54,6 +55,15 @@
             this.runMusictagButton.UseVisualStyleBackColor = true;
             this.runMusictagButton.Click += new System.EventHandler(this.runMusictagButton_Click);
             // 
+            // loadedFileLabel
+            // 
+            this.loadedFileLabel.AutoSize = true;
+            this.loadedFileLabel.Location = new System.Drawing.Point(150, 228);
+            this.loadedFileLabel.Name = "loadedFileLabel";
+            this.loadedFileLabel.Size = new System.Drawing.Size(120, 30);
+            this.loadedFileLabel.TabIndex = 3;
+            this.loadedFileLabel.Text = "Loaded file:";
+            // 
             // MainWindowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 30F);
@@ -61,6 +71,7 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(481, 471);
+            this.Controls.Add(this.loadedFileLabel);
             this.Controls.Add(this.runMusictagButton);
             this.Controls.Add(this.loadFileButton);
             this.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -69,6 +80,7 @@
             this.Name = "MainWindowForm";
             this.Text = "Music Tag";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -76,6 +88,7 @@
 
         private System.Windows.Forms.Button loadFileButton;
         private System.Windows.Forms.Button runMusictagButton;
+        private System.Windows.Forms.Label loadedFileLabel;
     }
 }
 
