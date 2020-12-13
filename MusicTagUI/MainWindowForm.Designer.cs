@@ -58,12 +58,13 @@
             // loadedFileLabel
             // 
             this.loadedFileLabel.Enabled = false;
+            this.loadedFileLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.loadedFileLabel.Location = new System.Drawing.Point(-1, 227);
             this.loadedFileLabel.Name = "loadedFileLabel";
             this.loadedFileLabel.Size = new System.Drawing.Size(482, 30);
             this.loadedFileLabel.TabIndex = 3;
-            this.loadedFileLabel.Text = "Loaded file:";
             this.loadedFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.loadedFileLabel.UseMnemonic = false;
             // 
             // MainWindowForm
             // 

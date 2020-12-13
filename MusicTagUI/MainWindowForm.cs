@@ -68,10 +68,14 @@ namespace MusicTagUI
             catch (ResultsArrayEmptyException)
             {
                 MessageBox.Show("Cannot recognize a song.", "No results", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            finally
+            {
+                loadedFileLabel.Text = "";
+                loadedFileLabel.Enabled = false;
             }
             MessageBox.Show("Your song was sucesfully recognized and renamed!", "Tagging succesful!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            loadedFileLabel.Enabled = false;
         }
     }
 }
