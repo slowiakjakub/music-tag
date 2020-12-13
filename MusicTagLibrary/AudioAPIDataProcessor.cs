@@ -25,7 +25,7 @@ namespace MusicTagLibrary
             body.Add("fingerprint", fingerprint);
             body.Add("duration", $"{duration}");
             var content = new FormUrlEncodedContent(body);        
-
+            
             string url = $"https://api.acoustid.org/v2/lookup?&meta=recordings+releasegroups+releases";
 
             using (HttpResponseMessage response = await APIHelper.ApiClient.PostAsync(url,content))

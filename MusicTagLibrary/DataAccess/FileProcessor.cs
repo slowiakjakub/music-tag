@@ -12,7 +12,7 @@ namespace MusicTagLibrary.DataAccess
         public static void RenameFile(ref string sourceFilePath, string finalFileName)
         {
             FileInfo fi = new FileInfo(sourceFilePath);
-            if(fi.Exists)
+            if (fi.Exists)
             {
                 string newFilePath = $@"{fi.Directory.FullName}\{finalFileName}{fi.Extension}";
                 fi.MoveTo(newFilePath);

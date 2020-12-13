@@ -42,9 +42,9 @@ namespace MusicTagUI
 
         private async void runMusictagButton_Click(object sender, EventArgs e)
         {
-            try 
+            runMusictagButton.Enabled = false;
+            try
             {
-                runMusictagButton.Enabled = false;
                 await MusicRecognizer.RunMusicTagForAudioFileAsync(filePath); // TODO - keep filePath actualized, you lose it after the file got renamed.
             }
             catch (AudioTooShortException)
@@ -67,7 +67,7 @@ namespace MusicTagUI
             {
                 MessageBox.Show("Cannot recognize a song.", "No results", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            MessageBox.Show("Your song was sucesfully recognized and renamed!","Tagging succesful!",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("Your song was sucesfully recognized and renamed!", "Tagging succesful!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
