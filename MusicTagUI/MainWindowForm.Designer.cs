@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindowForm));
             this.loadFileButton = new System.Windows.Forms.Button();
             this.runMusictagButton = new System.Windows.Forms.Button();
-            this.loadedFileLabel = new System.Windows.Forms.Label();
+            this.progressStatusLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // loadFileButton
@@ -55,16 +55,16 @@
             this.runMusictagButton.UseVisualStyleBackColor = true;
             this.runMusictagButton.Click += new System.EventHandler(this.runMusictagButton_Click);
             // 
-            // loadedFileLabel
+            // progressStatusLabel
             // 
-            this.loadedFileLabel.Enabled = false;
-            this.loadedFileLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.loadedFileLabel.Location = new System.Drawing.Point(-1, 227);
-            this.loadedFileLabel.Name = "loadedFileLabel";
-            this.loadedFileLabel.Size = new System.Drawing.Size(482, 30);
-            this.loadedFileLabel.TabIndex = 3;
-            this.loadedFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.loadedFileLabel.UseMnemonic = false;
+            this.progressStatusLabel.Enabled = false;
+            this.progressStatusLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.progressStatusLabel.Location = new System.Drawing.Point(-1, 227);
+            this.progressStatusLabel.Name = "progressStatusLabel";
+            this.progressStatusLabel.Size = new System.Drawing.Size(482, 30);
+            this.progressStatusLabel.TabIndex = 3;
+            this.progressStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.progressStatusLabel.UseMnemonic = false;
             // 
             // MainWindowForm
             // 
@@ -73,7 +73,7 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(481, 471);
-            this.Controls.Add(this.loadedFileLabel);
+            this.Controls.Add(this.progressStatusLabel);
             this.Controls.Add(this.runMusictagButton);
             this.Controls.Add(this.loadFileButton);
             this.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -89,7 +89,7 @@
 
         private System.Windows.Forms.Button loadFileButton;
         private System.Windows.Forms.Button runMusictagButton;
-        private System.Windows.Forms.Label loadedFileLabel;
+        private System.Windows.Forms.Label progressStatusLabel;
     }
 }
 
