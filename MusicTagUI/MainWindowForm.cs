@@ -37,6 +37,8 @@ namespace MusicTagUI
             {
                 filePath = ofd.FileName;
                 runMusictagButton.Enabled = true;
+                loadedFileLabel.Enabled = true;
+                loadedFileLabel.Text = $"Loaded file: { Path.GetFileName(filePath)}";
             }
         }
 
@@ -68,6 +70,8 @@ namespace MusicTagUI
                 MessageBox.Show("Cannot recognize a song.", "No results", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             MessageBox.Show("Your song was sucesfully recognized and renamed!", "Tagging succesful!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            loadedFileLabel.Enabled = false;
         }
     }
 }

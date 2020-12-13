@@ -57,6 +57,7 @@
             // 
             // loadedFileLabel
             // 
+            this.loadedFileLabel.Enabled = false;
             this.loadedFileLabel.Location = new System.Drawing.Point(-1, 227);
             this.loadedFileLabel.Name = "loadedFileLabel";
             this.loadedFileLabel.Size = new System.Drawing.Size(482, 30);
