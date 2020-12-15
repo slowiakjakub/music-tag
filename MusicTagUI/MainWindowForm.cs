@@ -37,6 +37,7 @@ namespace MusicTagUI
             {
                 filePath = ofd.FileName;
                 runMusictagButton.Enabled = true;
+                progressStatusLabel.ForeColor = Color.Black;
                 progressStatusLabel.Text = $"Loaded file: { Path.GetFileName(filePath)}";
             }
         }
