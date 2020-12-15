@@ -57,7 +57,6 @@
             // 
             // progressStatusLabel
             // 
-            this.progressStatusLabel.Enabled = false;
             this.progressStatusLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.progressStatusLabel.Location = new System.Drawing.Point(-1, 227);
             this.progressStatusLabel.Name = "progressStatusLabel";

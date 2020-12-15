@@ -37,7 +37,6 @@ namespace MusicTagUI
             {
                 filePath = ofd.FileName;
                 runMusictagButton.Enabled = true;
-                progressStatusLabel.Enabled = true;
                 progressStatusLabel.Text = $"Loaded file: { Path.GetFileName(filePath)}";
             }
         }
@@ -74,8 +73,9 @@ namespace MusicTagUI
             finally
             {
                 progressStatusLabel.Text = "";
-                progressStatusLabel.Enabled = false;
             }
+            progressStatusLabel.ForeColor = Color.Green;
+            progressStatusLabel.Text = "Success!";
             MessageBox.Show("Your song was sucesfully recognized and renamed!", "Tagging succesful!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
