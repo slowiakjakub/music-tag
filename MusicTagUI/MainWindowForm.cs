@@ -52,23 +52,22 @@ namespace MusicTagUI
             }
             catch (AudioTooShortException)
             {
-                MessageBox.Show($"Your audio file is too short!{Environment.NewLine}" +
-                    $"It should be 30 seconds minimum!", "Invalid file", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBoxAudioTooShort();
                 return;
             }
             catch (Exception ex) when ((ex is InvalidOperationException) || (ex is InvalidDataException))
             {
-                MessageBox.Show("There was a problem processing your file." + Environment.NewLine + "Error Info: " + ex.Message, "Invalid file", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBoxProblemProcessing(ex);
                 return;
             }
             catch (HttpRequestException ex)
             {
-                MessageBox.Show("Connection to AcousticID API failed: " + Environment.NewLine + ex.Message, "Connection problem", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBoxConnectionFailed(ex);
                 return;
             }
             catch (ResultsArrayEmptyException)
             {
-                MessageBox.Show("Cannot recognize a song.", "No results", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBoxCannotRecognizeSong();
                 return;
             }
             finally
@@ -78,6 +77,39 @@ namespace MusicTagUI
             progressStatusLabel.ForeColor = Color.Green;
             progressStatusLabel.Text = "Success!";
             MessageBox.Show("Your song was sucesfully recognized and renamed!", "Tagging succesful!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void MessageBoxAudioTooShort()
+        {
+            MessageBox.Show($"Your audio file is too short!{Environment.NewLine}" +
+            "It should be 30 seconds minimum!",
+            "Invalid file", MessageBoxButtons.OK,
+            MessageBoxIcon.Information);
+        }
+        private void MessageBoxProblemProcessing(Exception ex)
+        {
+            MessageBox.Show("There was a problem processing your file."
+                + Environment.NewLine +
+                "Error Info: "
+                + ex.Message,
+                "Invalid file",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+        private void MessageBoxConnectionFailed(HttpRequestException ex)
+        {
+            MessageBox.Show("Connection to AcousticID API failed: " 
+                + Environment.NewLine 
+                + ex.Message, "Connection problem",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+        private void MessageBoxCannotRecognizeSong()
+        {
+            MessageBox.Show("Cannot recognize a song.",
+                "No results",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
     }
 }
