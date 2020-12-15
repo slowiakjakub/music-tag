@@ -74,9 +74,8 @@ namespace MusicTagUI
             {
                 progressStatusLabel.Text = "";
             }
-            progressStatusLabel.ForeColor = Color.Green;
-            progressStatusLabel.Text = "Success!";
-            MessageBox.Show("Your song was sucesfully recognized and renamed!", "Tagging succesful!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ProgressLabelOnSuccess();
+            MessageBoxOnSuccess();
         }
 
         private void MessageBoxAudioTooShort()
@@ -110,6 +109,18 @@ namespace MusicTagUI
                 "No results",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
+        }
+        private void MessageBoxOnSuccess()
+        {
+            MessageBox.Show("Your file was sucesfully recognized and renamed!",
+                "Tagging succesful!",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+        private void ProgressLabelOnSuccess()
+        {
+            progressStatusLabel.ForeColor = Color.Green;
+            progressStatusLabel.Text = "Success!";
         }
     }
 }
